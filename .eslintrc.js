@@ -7,5 +7,6 @@ module.exports = {
     'plugin:vue/vue3-recommended',
   ],
   rules: {
+    'quotes': ['error', 'single']
   }
 }

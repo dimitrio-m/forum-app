@@ -1,48 +1,52 @@
 <template>
   <div class="col-large push-top">
-    <ul class="breadcrumbs">
+    <!-- <ul class="breadcrumbs">
       <li><a href="#"><i class="fa fa-home fa-btn" />Home</a></li>
       <li><a href="category.html">Discussions</a></li>
       <li class="active">
         <a href="#">Cooking</a>
       </li>
-    </ul>
+    </ul> -->
 
-    <h1>Wasabi vs horseraddish?</h1>
+    <h1>{{ thread.title }}</h1>
 
     <p>
       By <a
         href="#"
         class="link-unstyled"
-      >Robin</a>, 2 hours ago.
+      >{{ userById(thread.userId).name }}</a>, 2 hours ago.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >3 replies by 3 contributors</span>
+      >{{ thread.posts.length - 1 }} replies by {{ thread.contributors.length }} contributors</span>
     </p>
 
     <div class="post-list">
-      <div class="post">
+      <div
+        v-for="post in threadPosts"
+        :key="post.id"
+        class="post"
+      >
         <div class="user-info">
           <a
             href="profile.html#profile-details"
             class="user-name"
-          >Robin</a>
+          >{{ userById(post.userId).name }}</a>
 
           <a href="profile.html#profile-details">
             <img
               class="avatar-large"
-              src="http://i.imgur.com/s0AzOkO.png"
+              :src="userById(post.userId).avatar"
               alt=""
             >
           </a>
 
           <p class="desktop-only text-small">
-            107 posts
+            {{ countPostsByUser(post.userId) }} posts
           </p>
 
           <p class="desktop-only text-small">
-            23 threads
+            {{ countThreadsByUser(post.userId) }} threads
           </p>
 
           <span class="online desktop-only">online</span>
@@ -51,8 +55,7 @@
         <div class="post-content">
           <div>
             <p>
-              Is horseradish and Wasabi the same thing? I've heard so many different things.<br><br>
-              I want to know once and for all.
+              {{ post.text }}
             </p>
           </div>
           <a
@@ -88,119 +91,6 @@
           </button>
         </div>
       </div>
-
-      <div class="post">
-        <div class="user-info">
-          <a
-            href="profile.html#profile-details"
-            class="user-name"
-          >Joseph Kerr</a>
-
-          <a href="profile.html#profile-details">
-            <img
-              class="avatar-large"
-              src="https://i.imgur.com/OqlZN48.jpg"
-              alt=""
-            >
-          </a>
-
-          <p class="desktop-only text-small">
-            116 posts
-          </p>
-
-          <p class="desktop-only text-small">
-            73 threads
-          </p>
-
-          <span class="online desktop-only">online</span>
-        </div>
-
-        <div class="post-content">
-          <div>
-            <blockquote class="small">
-              <div class="author">
-                <a
-                  href="/user/robin"
-                  class=""
-                > robin</a>
-                <span class="time">a month ago</span>
-                <i class="fa fa-caret-down" />
-              </div>
-
-              <div class="quote">
-                <p>Is horseradish and Wasabi the same thing? I've heard so many different things.</p>
-              </div>
-            </blockquote>
-            <p>They're not the same!</p>
-          </div>
-          <a class="edit-post link-unstyled"><i class="fa fa-pencil" /></a>
-        </div>
-
-
-
-        <div class="post-date text-faded">
-          6 hours ago
-        </div>
-
-        <div class="reactions">
-          <button class="btn-xsmall">
-            + <i class="fa fa-smile-o emoji" />
-          </button>
-        </div>
-      </div>
-
-      <div class="post">
-        <div class="user-info">
-          <a
-            href="profile.html#profile-details"
-            class="user-name"
-          >Ray-Nathan James</a>
-
-          <a href="profile.html#profile-details">
-            <img
-              class="avatar-large"
-              src="https://firebasestorage.googleapis.com/v0/b/forum-2a982.appspot.com/o/images%2Favatars%2Fraynathan?alt=media&token=bd9a0f0e-60f2-4e60-b092-77d1ded50a7e"
-              alt=""
-            >
-          </a>
-
-          <p class="desktop-only text-small">
-            10 posts
-          </p>
-
-          <p class="desktop-only text-small">
-            4 threads
-          </p>
-
-          <span class="offline desktop-only">offline</span>
-        </div>
-
-        <div class="post-content">
-          <div>
-            <p>
-              <a
-                href="/user/Joker"
-                class=""
-              >@Joker</a> is right, they're not the same.
-            </p>
-            <p>
-              They are different plants from the same family (mustard/cabbage).
-            </p>
-          </div>
-        </div>
-
-
-
-        <div class="post-date text-faded">
-          6 hours ago
-        </div>
-
-        <div class="reactions">
-          <button class="btn-xsmall">
-            + <i class="fa fa-smile-o emoji" />
-          </button>
-        </div>
-      </div>
     </div>
   </div>
 </template>
@@ -209,6 +99,12 @@
 import {threads, posts, users, forums, categories, stats} from '@/data.json'
 
 export default {
+    props: {
+      id: {
+        type: String,
+        required: true
+      },
+    },
     data() {
       return {
         threads,
@@ -217,6 +113,14 @@ export default {
         forums,
         categories,
         stats
+      }
+    },
+    computed: {
+      thread() {
+        return this.threadById(this.id)
+      },
+      threadPosts() {
+        return this.posts.filter(post => post.threadId === this.id)
       }
     },
     methods: {
@@ -228,6 +132,12 @@ export default {
       },
       threadById(threadId) {
         return this.threads.find(thread => thread.id === threadId)
+      },
+      countPostsByUser(userId) {
+        return this.posts.filter(post => post.userId === userId).length
+      },
+      countThreadsByUser(userId) {
+        return this.threads.filter(thread => thread.userId === userId).length
       }
     }
 }
