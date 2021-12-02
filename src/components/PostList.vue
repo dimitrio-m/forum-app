@@ -97,12 +97,6 @@ export default {
     userById(userId) {
       return this.source.users.find(user => user.id === userId)
     },
-    postById(postId) {
-      return this.source.posts.find(post => post.id === postId)
-    },
-    threadById(threadId) {
-      return this.source.threads.find(thread => thread.id === threadId)
-    },
     countPostsByUser(userId) {
       return this.source.posts.filter(post => post.userId === userId).length
     },
