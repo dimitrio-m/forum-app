@@ -46,26 +46,26 @@
 import {threads, users} from '@/data.json'
 
 export default {
-    props: {
-      forums: {
-        type: Array,
-        required: true
-      }
-    },
-    data() {
-      return {
-        threads,
-        users,
-      }
-    },
-    methods: {
-      userById(userId) {
-        return this.users.find(user => user.id === userId)
-      },
-      threadById(threadId) {
-        return this.threads.find(thread => thread.id === threadId)
-      }
+  props: {
+    forums: {
+      type: Array,
+      required: true
     }
+  },
+  data() {
+    return {
+      threads,
+      users,
+    }
+  },
+  methods: {
+    userById(userId) {
+      return this.users.find(user => user.id === userId)
+    },
+    threadById(threadId) {
+      return this.threads.find(thread => thread.id === threadId)
+    }
+  }
 }
 </script>
 

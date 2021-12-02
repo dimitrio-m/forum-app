@@ -21,27 +21,27 @@ export default {
   components: {
     ForumList
   },
-    data() {
-      return {
-        threads,
-        posts,
-        users,
-        forums,
-        categories,
-        stats
-      }
-    },
-    methods: {
-      userById(userId) {
-        return this.users.find(user => user.id === userId)
-      },
-      postById(postId) {
-        return this.posts.find(post => post.id === postId)
-      },
-      threadById(threadId) {
-        return this.threads.find(thread => thread.id === threadId)
-      }
+  data() {
+    return {
+      threads,
+      posts,
+      users,
+      forums,
+      categories,
+      stats
     }
+  },
+  methods: {
+    userById(userId) {
+      return this.users.find(user => user.id === userId)
+    },
+    postById(postId) {
+      return this.posts.find(post => post.id === postId)
+    },
+    threadById(threadId) {
+      return this.threads.find(thread => thread.id === threadId)
+    }
+  }
 }
 </script>
 

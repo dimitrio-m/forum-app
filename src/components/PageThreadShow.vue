@@ -33,47 +33,47 @@ export default {
   components: {
     PostList
   },
-    props: {
-      id: {
-        type: String,
-        required: true
-      },
+  props: {
+    id: {
+      type: String,
+      required: true
     },
-    data() {
-      return {
-        threads,
-        posts,
-        users,
-        forums,
-        categories,
-        stats
-      }
-    },
-    computed: {
-      thread() {
-        return this.threadById(this.id)
-      },
-      threadPosts() {
-        return this.posts.filter(post => post.threadId === this.id)
-      }
-    },
-    methods: {
-      userById(userId) {
-        return this.users.find(user => user.id === userId)
-      },
-      postById(postId) {
-        return this.posts.find(post => post.id === postId)
-      },
-      threadById(threadId) {
-        return this.threads.find(thread => thread.id === threadId)
-      },
-      countPostsByUser(userId) {
-        return this.posts.filter(post => post.userId === userId).length
-      },
-      countThreadsByUser(userId) {
-        return this.threads.filter(thread => thread.userId === userId).length
-      }
+  },
+  data() {
+    return {
+      threads,
+      posts,
+      users,
+      forums,
+      categories,
+      stats
     }
+  },
+  computed: {
+    thread() {
+      return this.threadById(this.id)
+    },
+    threadPosts() {
+      return this.posts.filter(post => post.threadId === this.id)
+    }
+  },
+  methods: {
+    userById(userId) {
+      return this.users.find(user => user.id === userId)
+    },
+    postById(postId) {
+      return this.posts.find(post => post.id === postId)
+    },
+    threadById(threadId) {
+      return this.threads.find(thread => thread.id === threadId)
+    },
+    countPostsByUser(userId) {
+      return this.posts.filter(post => post.userId === userId).length
+    },
+    countThreadsByUser(userId) {
+      return this.threads.filter(thread => thread.userId === userId).length
+    }
+  }
 }
 </script>
 

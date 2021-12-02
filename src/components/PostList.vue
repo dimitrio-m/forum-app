@@ -78,39 +78,39 @@
 import {threads, posts, users, forums, categories, stats} from '@/data.json'
 
 export default {
-    props: {
-      threadPosts: {
-        type: Array,
-        required: true
-      },
+  props: {
+    threadPosts: {
+      type: Array,
+      required: true
     },
-    data() {
-      return {
-        threads,
-        posts,
-        users,
-        forums,
-        categories,
-        stats
-      }
-    },
-    methods: {
-      userById(userId) {
-        return this.users.find(user => user.id === userId)
-      },
-      postById(postId) {
-        return this.posts.find(post => post.id === postId)
-      },
-      threadById(threadId) {
-        return this.threads.find(thread => thread.id === threadId)
-      },
-      countPostsByUser(userId) {
-        return this.posts.filter(post => post.userId === userId).length
-      },
-      countThreadsByUser(userId) {
-        return this.threads.filter(thread => thread.userId === userId).length
-      }
+  },
+  data() {
+    return {
+      threads,
+      posts,
+      users,
+      forums,
+      categories,
+      stats
     }
+  },
+  methods: {
+    userById(userId) {
+      return this.users.find(user => user.id === userId)
+    },
+    postById(postId) {
+      return this.posts.find(post => post.id === postId)
+    },
+    threadById(threadId) {
+      return this.threads.find(thread => thread.id === threadId)
+    },
+    countPostsByUser(userId) {
+      return this.posts.filter(post => post.userId === userId).length
+    },
+    countThreadsByUser(userId) {
+      return this.threads.filter(thread => thread.userId === userId).length
+    }
+  }
 }
 </script>
 
