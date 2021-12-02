@@ -1,15 +1,11 @@
 <template>
   <div class="col-full">
-    <div
+    <forum-list
       v-for="category in categories"
       :key="category.id"
-      class="forum-list"
-    >
-      <h2 class="list-title">
-        <a href="#"> {{ category.name }}</a>
-      </h2>
-      <forum-list :forums="forums.filter(f => f.categoryId === category.id)" />
-    </div>
+      :category="category"
+      :forums="forums.filter(f => f.categoryId === category.id)"
+    />
   </div>
 </template>
 

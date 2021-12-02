@@ -23,48 +23,10 @@
       </div>
     </div>
 
-    <div class="col-full">
-      <div class="thread-list">
-        <h2 class="list-title">
-          Threads
-        </h2>
+    <thread-list :forum-threads="forumThreads" />
 
-        <div
-          v-for="thread in forumThreads"
-          :key="thread.id"
-          class="thread"
-        >
-          <div>
-            <p>
-              <a href="thread.html">{{ thread.title }}</a>
-            </p>
-            <p class="text-faded text-xsmall">
-              By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, {{ thread.publishedAt }}.
-            </p>
-          </div>
-
-          <div class="activity">
-            <p class="replies-count">
-              {{ thread.posts.length - 1 }} reply
-            </p>
-            <img
-              class="avatar-medium"
-              :src="userById(getLastPostOfThread(thread).userId).avatar"
-              alt=""
-            >
-            <div>
-              <p class="text-xsmall">
-                <a href="profile.html">{{ userById(getLastPostOfThread(thread).userId).name }}</a>
-              </p>
-              <p class="text-xsmall text-faded">
-                {{ getLastPostOfThread(thread).publishedAt }}
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- <div class="pagination">
+    <!-- <div class="col-full">
+      <div class="pagination">
         <button
           class="btn-circle"
           disabled
@@ -75,16 +37,18 @@
         <button class="btn-circle">
           <i class="fa fa-angle-right" />
         </button>
-      </div> -->
-    </div>
+      </div>
+    </div> -->
   </div>
 </template>
 
 <script>
 import {threads, posts, users, forums, categories, stats} from '@/data.json'
+import ThreadList from '@/components/ThreadList.vue';
 
 export default {
   components: {
+    ThreadList
   },
   props: {
     id: {
