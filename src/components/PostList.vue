@@ -1,7 +1,7 @@
 <template>
   <div class="post-list">
     <div
-      v-for="post in threadPosts"
+      v-for="post in posts"
       :key="post.id"
       class="post"
     >
@@ -75,40 +75,39 @@
 </template>
 
 <script>
-import {threads, posts, users, forums, categories, stats} from '@/data.json'
+import {threads, posts, users} from '@/data.json'
 
 export default {
   props: {
-    threadPosts: {
+    posts: {
       type: Array,
       required: true
     },
   },
   data() {
     return {
-      threads,
-      posts,
-      users,
-      forums,
-      categories,
-      stats
+      source: {
+        posts: posts,
+        threads: threads,
+        users: users
+      }
     }
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return this.source.users.find(user => user.id === userId)
     },
     postById(postId) {
-      return this.posts.find(post => post.id === postId)
+      return this.source.posts.find(post => post.id === postId)
     },
     threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
+      return this.source.threads.find(thread => thread.id === threadId)
     },
     countPostsByUser(userId) {
-      return this.posts.filter(post => post.userId === userId).length
+      return this.source.posts.filter(post => post.userId === userId).length
     },
     countThreadsByUser(userId) {
-      return this.threads.filter(thread => thread.userId === userId).length
+      return this.source.threads.filter(thread => thread.userId === userId).length
     }
   }
 }

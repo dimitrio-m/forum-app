@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import {threads, posts, users, forums, categories, stats} from '@/data.json'
+import {threads, forums} from '@/data.json'
 import ThreadList from '@/components/ThreadList.vue';
 
 export default {
@@ -58,12 +58,10 @@ export default {
   },
   data() {
     return {
-      threads,
-      posts,
-      users,
-      forums,
-      categories,
-      stats
+      source: {
+        threads: threads,
+        forums: forums,
+      }
     }
   },
   computed: {
@@ -71,31 +69,13 @@ export default {
       return this.forumById(this.id)
     },
     forumThreads() {
-      return this.threads.filter(thread => thread.forumId === this.id)
+      return this.source.threads.filter(thread => thread.forumId === this.id)
     }
   },
   methods: {
-    userById(userId) {
-      return this.users.find(user => user.id === userId)
-    },
-    postById(postId) {
-      return this.posts.find(post => post.id === postId)
-    },
-    threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
-    },
     forumById(forumId) {
-      return this.forums.find(forum => forum.id === forumId)
+      return this.source.forums.find(forum => forum.id === forumId)
     },
-    countPostsByUser(userId) {
-      return this.posts.filter(post => post.userId === userId).length
-    },
-    countThreadsByUser(userId) {
-      return this.threads.filter(thread => thread.userId === userId).length
-    },
-    getLastPostOfThread(thread) {
-      return this.postById(thread.posts[thread.posts.length - 1])
-    }
   }
 }
 </script>

@@ -1,10 +1,10 @@
 <template>
   <div class="col-full">
     <forum-list
-      v-for="category in categories"
+      v-for="category in source.categories"
       :key="category.id"
       :category="category"
-      :forums="forums.filter(f => f.categoryId === category.id)"
+      :forums="source.forums.filter(f => f.categoryId === category.id)"
     />
   </div>
 </template>
@@ -19,23 +19,25 @@ export default {
   },
   data() {
     return {
-      threads,
-      posts,
-      users,
-      forums,
-      categories,
-      stats
+      source: {
+        posts: posts,
+        threads: threads,
+        users: users,
+        forums: forums,
+        categories: categories,
+        stats: stats,
+      }
     }
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return this.source.users.find(user => user.id === userId)
     },
     postById(postId) {
-      return this.posts.find(post => post.id === postId)
+      return this.source.posts.find(post => post.id === postId)
     },
     threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
+      return this.source.threads.find(thread => thread.id === threadId)
     }
   }
 }

@@ -14,19 +14,19 @@
       By <a
         href="#"
         class="link-unstyled"
-      >{{ userById(thread.userId).name }}</a>, 2 hours ago.
+      >{{ userById(thread.userId).name }}</a>, {{ thread.publishedAt }}.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >{{ thread.posts.length - 1 }} replies by {{ thread.contributors.length }} contributors</span>
+      >{{ thread.posts.length - 1 }} replies by {{ thread.contributors?.length || 0 }} contributors</span>
     </p>
 
-    <post-list :thread-posts="threadPosts" />
+    <post-list :posts="threadPosts" />
   </div>
 </template>
 
 <script>
-import {threads, posts, users, forums, categories, stats} from '@/data.json'
+import { threads, posts, users } from '@/data.json'
 import PostList from '@/components/PostList.vue'
 
 export default {
@@ -41,12 +41,11 @@ export default {
   },
   data() {
     return {
-      threads,
-      posts,
-      users,
-      forums,
-      categories,
-      stats
+      source: {
+        posts: posts,
+        threads: threads,
+        users: users,
+      }
     }
   },
   computed: {
@@ -54,25 +53,16 @@ export default {
       return this.threadById(this.id)
     },
     threadPosts() {
-      return this.posts.filter(post => post.threadId === this.id)
+      return this.source.posts.filter(post => post.threadId === this.id)
     }
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
-    },
-    postById(postId) {
-      return this.posts.find(post => post.id === postId)
+      return this.source.users.find(user => user.id === userId)
     },
     threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
+      return this.source.threads.find(thread => thread.id === threadId)
     },
-    countPostsByUser(userId) {
-      return this.posts.filter(post => post.userId === userId).length
-    },
-    countThreadsByUser(userId) {
-      return this.threads.filter(thread => thread.userId === userId).length
-    }
   }
 }
 </script>
