@@ -1,17 +1,35 @@
 import {createRouter, createWebHistory} from 'vue-router'
-import PageHome from '@/components/PageHome.vue'
-import PageThreadShow from '@/components/PageThreadShow.vue'
-import PageForumShow from '@/components/PageForumShow.vue'
-import PageNotFound from '@/components/PageNotFound.vue'
+import Home from '@/pages/Home.vue'
+import ThreadShow from '@/pages/ThreadShow.vue'
+import ForumShow from '@/pages/ForumShow.vue'
+import NotFound from '@/pages/NotFound.vue'
 import sourceData from '@/data.json'
 
 const routes = [
-  { path: '/', name: 'Home', component: PageHome },
-  { path: '/forum/:id', name: 'ForumShow', component: PageForumShow, props: true },
+  { path: '/', name: 'Home', component: Home },
+  {
+    path: '/forum/:id',
+    name: 'ForumShow',
+    component: ForumShow,
+    props: true,
+    beforeEnter(to, from, next) {
+      const forumExists = sourceData.forums.some(forum => forum.id === to.params.id)
+      if (forumExists) {
+        next()
+      } else {
+        next({
+          name: 'NotFound',
+          params: { pathMatch: to.path.substring(1).split('/') },
+          query: to.query,
+          hash: to.hash,
+        })
+      }
+    }
+  },
   {
     path: '/thread/:id',
     name: 'ThreadShow',
-    component: PageThreadShow,
+    component: ThreadShow,
     props: true,
     beforeEnter(to, from, next) {
       const threadExists = sourceData.threads.some(thread => thread.id === to.params.id)
@@ -27,7 +45,7 @@ const routes = [
       }
     }
   },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: PageNotFound },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ]
 
 export default createRouter({
