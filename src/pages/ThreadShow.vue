@@ -58,12 +58,10 @@
 
 <script>
 import { threads, posts, users } from '@/data.json'
-import AppDate from '@/components/AppDate.vue'
 import PostList from '@/components/PostList.vue'
 
 export default {
   components: {
-    AppDate,
     PostList
   },
   props: {

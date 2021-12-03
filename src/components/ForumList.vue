@@ -53,12 +53,8 @@
 
 <script>
 import {threads, users} from '@/data.json'
-import AppDate from '@/components/AppDate.vue'
 
 export default {
-  components: {
-    AppDate
-  },
   props: {
     forums: {
       type: Array,
