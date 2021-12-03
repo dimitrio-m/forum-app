@@ -52,8 +52,6 @@
 </template>
 
 <script>
-import {threads, users} from '@/data.json'
-
 export default {
   props: {
     forums: {
@@ -65,11 +63,13 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      threads,
-      users,
-    }
+  computed: {
+    threads() {
+      return this.$store.state.threads
+    },
+    users() {
+      return this.$store.state.users
+    },
   },
   methods: {
     userById(userId) {

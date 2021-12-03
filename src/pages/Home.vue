@@ -1,45 +1,29 @@
 <template>
   <div class="col-full">
     <forum-list
-      v-for="category in source.categories"
+      v-for="category in categories"
       :key="category.id"
       :category="category"
-      :forums="source.forums.filter(f => f.categoryId === category.id)"
+      :forums="forums.filter(f => f.categoryId === category.id)"
     />
   </div>
 </template>
 
 <script>
-import {threads, posts, users, forums, categories, stats} from '@/data.json'
 import ForumList from '@/components/ForumList.vue'
 
 export default {
   components: {
     ForumList
   },
-  data() {
-    return {
-      source: {
-        posts: posts,
-        threads: threads,
-        users: users,
-        forums: forums,
-        categories: categories,
-        stats: stats,
-      }
+  computed: {
+    categories() {
+      return this.$store.state.categories
+    },
+    forums() {
+      return this.$store.state.forums
     }
   },
-  methods: {
-    userById(userId) {
-      return this.source.users.find(user => user.id === userId)
-    },
-    postById(postId) {
-      return this.source.posts.find(post => post.id === postId)
-    },
-    threadById(threadId) {
-      return this.source.threads.find(thread => thread.id === threadId)
-    }
-  }
 }
 </script>
 

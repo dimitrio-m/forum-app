@@ -43,7 +43,6 @@
 </template>
 
 <script>
-import {threads, forums} from '@/data.json'
 import ThreadList from '@/components/ThreadList.vue';
 
 export default {
@@ -56,25 +55,23 @@ export default {
       required: true
     },
   },
-  data() {
-    return {
-      source: {
-        threads: threads,
-        forums: forums,
-      }
-    }
-  },
   computed: {
+    threads() {
+      return this.$store.state.threads
+    },
+    forums() {
+      return this.$store.state.forums
+    },
     forum() {
       return this.forumById(this.id)
     },
     forumThreads() {
-      return this.source.threads.filter(thread => thread.forumId === this.id)
+      return this.threads.filter(thread => thread.forumId === this.id)
     }
   },
   methods: {
     forumById(forumId) {
-      return this.source.forums.find(forum => forum.id === forumId)
+      return this.forums.find(forum => forum.id === forumId)
     },
   }
 }

@@ -75,8 +75,6 @@
 </template>
 
 <script>
-import {threads, posts, users} from '@/data.json'
-
 export default {
   props: {
     posts: {
@@ -84,24 +82,26 @@ export default {
       required: true
     },
   },
-  data() {
-    return {
-      source: {
-        posts: posts,
-        threads: threads,
-        users: users
-      }
-    }
+  computed: {
+    threads() {
+      return this.$store.state.threads
+    },
+    storedPosts() {
+      return this.$store.state.posts
+    },
+    users() {
+      return this.$store.state.users
+    },
   },
   methods: {
     userById(userId) {
-      return this.source.users.find(user => user.id === userId)
+      return this.users.find(user => user.id === userId)
     },
     countPostsByUser(userId) {
-      return this.source.posts.filter(post => post.userId === userId).length
+      return this.storedPosts.filter(post => post.userId === userId).length
     },
     countThreadsByUser(userId) {
-      return this.source.threads.filter(thread => thread.userId === userId).length
+      return this.threads.filter(thread => thread.userId === userId).length
     },
   }
 }

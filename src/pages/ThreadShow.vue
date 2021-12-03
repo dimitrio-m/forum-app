@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { threads, posts, users } from '@/data.json'
 import PostList from '@/components/PostList.vue'
 
 export default {
@@ -72,28 +71,32 @@ export default {
   },
   data() {
     return {
-      source: {
-        posts: posts,
-        threads: threads,
-        users: users,
-      },
       newPostText: ''
     }
   },
   computed: {
+    threads() {
+      return this.$store.state.threads
+    },
+    posts() {
+      return this.$store.state.posts
+    },
+    users() {
+      return this.$store.state.users
+    },
     thread() {
       return this.threadById(this.id)
     },
     threadPosts() {
-      return this.source.posts.filter(post => post.threadId === this.id)
+      return this.posts.filter(post => post.threadId === this.id)
     }
   },
   methods: {
     userById(userId) {
-      return this.source.users.find(user => user.id === userId)
+      return this.users.find(user => user.id === userId)
     },
     threadById(threadId) {
-      return this.source.threads.find(thread => thread.id === threadId)
+      return this.threads.find(thread => thread.id === threadId)
     }
   }
 }
