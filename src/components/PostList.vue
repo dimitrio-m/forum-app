@@ -49,7 +49,7 @@
 
 
       <div class="post-date text-faded">
-        {{ readableDate(post.publishedAt) }}
+        <app-date :timestamp="post.publishedAt" />
       </div>
 
       <!--  <div class="reactions">
@@ -75,13 +75,13 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import {threads, posts, users} from '@/data.json'
-
-dayjs.extend(relativeTime)
+import AppDate from '@/components/AppDate.vue'
 
 export default {
+  components: {
+    AppDate
+  },
   props: {
     posts: {
       type: Array,
@@ -107,9 +107,6 @@ export default {
     countThreadsByUser(userId) {
       return this.source.threads.filter(thread => thread.userId === userId).length
     },
-    readableDate(timestamp) {
-      return dayjs.unix(timestamp).fromNow()
-    }
   }
 }
 </script>

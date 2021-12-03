@@ -14,7 +14,7 @@
       By <a
         href="#"
         class="link-unstyled"
-      >{{ userById(thread.userId).name }}</a>, {{ readableDate(thread.publishedAt) }}.
+      >{{ userById(thread.userId).name }}</a>, <app-date :timestamp="thread.publishedAt" />.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
@@ -57,15 +57,13 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import { threads, posts, users } from '@/data.json'
+import AppDate from '@/components/AppDate.vue'
 import PostList from '@/components/PostList.vue'
-
-dayjs.extend(relativeTime)
 
 export default {
   components: {
+    AppDate,
     PostList
   },
   props: {
@@ -98,9 +96,6 @@ export default {
     },
     threadById(threadId) {
       return this.source.threads.find(thread => thread.id === threadId)
-    },
-    readableDate(timestamp) {
-      return dayjs.unix(timestamp).fromNow()
     }
   }
 }

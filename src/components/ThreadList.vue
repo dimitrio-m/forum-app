@@ -15,7 +15,7 @@
           </router-link>
         </p>
         <p class="text-faded text-xsmall">
-          By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, {{ readableDate(thread.publishedAt) }}.
+          By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, <app-date :timestamp="thread.publishedAt" />.
         </p>
       </div>
 
@@ -33,7 +33,7 @@
             <a href="profile.html">{{ userById(getLastPostOfThread(thread).userId).name }}</a>
           </p>
           <p class="text-xsmall text-faded">
-            {{ readableDate(getLastPostOfThread(thread).publishedAt) }}
+            <app-date :timestamp="getLastPostOfThread(thread).publishedAt" />
           </p>
         </div>
       </div>
@@ -42,13 +42,13 @@
 </template>
 
 <script>
-import dayjs from 'dayjs'
-import relativeTime from 'dayjs/plugin/relativeTime'
 import { posts, users } from '@/data.json'
-
-dayjs.extend(relativeTime)
+import AppDate from '@/components/AppDate.vue'
 
 export default {
+  components: {
+    AppDate
+  },
   props: {
     forumThreads: {
       type: Array,
@@ -70,9 +70,6 @@ export default {
     },
     getLastPostOfThread(thread) {
       return this.postById(thread.posts[thread.posts.length - 1])
-    },
-    readableDate(timestamp) {
-      return dayjs.unix(timestamp).fromNow()
     }
   }
 }
