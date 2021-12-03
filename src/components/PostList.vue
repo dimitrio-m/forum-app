@@ -49,7 +49,7 @@
 
 
       <div class="post-date text-faded">
-        {{ post.publishedAt }}
+        {{ readableDate(post.publishedAt) }}
       </div>
 
       <!--  <div class="reactions">
@@ -75,7 +75,11 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {threads, posts, users} from '@/data.json'
+
+dayjs.extend(relativeTime)
 
 export default {
   props: {
@@ -102,6 +106,9 @@ export default {
     },
     countThreadsByUser(userId) {
       return this.source.threads.filter(thread => thread.userId === userId).length
+    },
+    readableDate(timestamp) {
+      return dayjs.unix(timestamp).fromNow()
     }
   }
 }

@@ -15,7 +15,7 @@
           </router-link>
         </p>
         <p class="text-faded text-xsmall">
-          By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, {{ thread.publishedAt }}.
+          By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, {{ readableDate(thread.publishedAt) }}.
         </p>
       </div>
 
@@ -33,7 +33,7 @@
             <a href="profile.html">{{ userById(getLastPostOfThread(thread).userId).name }}</a>
           </p>
           <p class="text-xsmall text-faded">
-            {{ getLastPostOfThread(thread).publishedAt }}
+            {{ readableDate(getLastPostOfThread(thread).publishedAt) }}
           </p>
         </div>
       </div>
@@ -42,7 +42,11 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { posts, users } from '@/data.json'
+
+dayjs.extend(relativeTime)
 
 export default {
   props: {
@@ -66,6 +70,9 @@ export default {
     },
     getLastPostOfThread(thread) {
       return this.postById(thread.posts[thread.posts.length - 1])
+    },
+    readableDate(timestamp) {
+      return dayjs.unix(timestamp).fromNow()
     }
   }
 }

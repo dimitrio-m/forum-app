@@ -36,7 +36,7 @@
         <div class="last-thread-details">
           <a href="#">{{ threadById(forum.threads[0]).title }}</a>
           <p class="text-xsmall">
-            By <a href="#">{{ userById(threadById(forum.threads[0]).userId).name }}</a>, a month ago
+            By <a href="#">{{ userById(threadById(forum.threads[0]).userId).name }}</a>, {{ readableDate(threadById(forum.threads[0]).publishedAt) }}
           </p>
         </div>
       </div>
@@ -52,7 +52,11 @@
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import {threads, users} from '@/data.json'
+
+dayjs.extend(relativeTime)
 
 export default {
   props: {
@@ -77,6 +81,9 @@ export default {
     },
     threadById(threadId) {
       return this.threads.find(thread => thread.id === threadId)
+    },
+    readableDate(timestamp) {
+      return dayjs.unix(timestamp).fromNow()
     }
   }
 }

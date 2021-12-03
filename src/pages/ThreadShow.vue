@@ -14,7 +14,7 @@
       By <a
         href="#"
         class="link-unstyled"
-      >{{ userById(thread.userId).name }}</a>, {{ thread.publishedAt }}.
+      >{{ userById(thread.userId).name }}</a>, {{ readableDate(thread.publishedAt) }}.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
@@ -22,12 +22,47 @@
     </p>
 
     <post-list :posts="threadPosts" />
+
+    <div class="col-full push-top">
+      <h1>Create new post in <i>{{ thread.title }}</i></h1>
+
+      <form action="">
+        <div class="form-group">
+          <label for="thread_content">Content:</label>
+          <textarea
+            id="post_content"
+            v-model="newPostText"
+            class="form-input"
+            name="content"
+            rows="8"
+            cols="140"
+          />
+        </div>
+
+        <div class="btn-group">
+          <button class="btn btn-ghost">
+            Cancel
+          </button>
+          <button
+            class="btn btn-blue"
+            type="submit"
+            name="Publish"
+          >
+            Publish
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
+import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import { threads, posts, users } from '@/data.json'
 import PostList from '@/components/PostList.vue'
+
+dayjs.extend(relativeTime)
 
 export default {
   components: {
@@ -45,7 +80,8 @@ export default {
         posts: posts,
         threads: threads,
         users: users,
-      }
+      },
+      newPostText: ''
     }
   },
   computed: {
@@ -63,6 +99,9 @@ export default {
     threadById(threadId) {
       return this.source.threads.find(thread => thread.id === threadId)
     },
+    readableDate(timestamp) {
+      return dayjs.unix(timestamp).fromNow()
+    }
   }
 }
 </script>
