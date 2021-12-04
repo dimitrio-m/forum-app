@@ -32,8 +32,6 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
 export default {
   props: {
     title: {
@@ -47,14 +45,9 @@ export default {
       text: ''
     }
   },
-  computed: {
-    ...mapGetters(['authUser'])
-  },
   methods: {
     save() {
       const post = {
-        userId: this.authUser.id,
-        publishedAt: Math.floor(Date.now()/1000),
         text: this.text
       }
       this.$emit('save', { post })
