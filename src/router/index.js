@@ -3,6 +3,7 @@ import Home from '@/pages/Home.vue'
 import ThreadShow from '@/pages/ThreadShow.vue'
 import ForumShow from '@/pages/ForumShow.vue'
 import NotFound from '@/pages/NotFound.vue'
+import Profile from '@/pages/Profile.vue'
 import sourceData from '@/data.json'
 
 const routes = [
@@ -45,6 +46,7 @@ const routes = [
       }
     }
   },
+  { path: '/me', name: 'Profile', component: Profile },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
 ]
 

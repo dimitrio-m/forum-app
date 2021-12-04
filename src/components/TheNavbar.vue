@@ -93,7 +93,7 @@ export default {
       dropdownLinks: [
         {
           text: 'View profile',
-          page: 'Home'
+          page: 'Profile'
         },
         {
           text: 'Log out',
@@ -119,7 +119,7 @@ export default {
         },
         {
           text: 'My Profile',
-          page: 'Home',
+          page: 'Profile',
           isMobileOnly: true
         },
         {
