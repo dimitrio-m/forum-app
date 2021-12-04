@@ -29,15 +29,22 @@ export default createStore({
     }
   },
   actions: {
-    createPost(context, post) {
+    createPost({ commit }, post) {
       post.id = 'asdf' + Math.random()
-      context.commit('setPost', { post })
-      context.commit('appendPostToThread', { postId: post.id, threadId: post.threadId})
-    }
+      commit('setPost', { post })
+      commit('appendPostToThread', { postId: post.id, threadId: post.threadId})
+    },
+    updateUser({ commit }, user) {
+      commit('setUser', { user, userId: user.id })
+    },
   },
   mutations: {
     setPost(state, { post }) {
       state.posts.push(post)
+    },
+    setUser(state, { user, userId }) {
+      const userIndex = state.users.findIndex(user => user.id === userId)
+      state.users[userIndex] = { ...user }
     },
     appendPostToThread(state, { postId, threadId }) {
       const thread = state.threads.find(thread => thread.id === threadId)
