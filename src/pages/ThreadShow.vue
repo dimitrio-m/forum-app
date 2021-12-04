@@ -23,44 +23,20 @@
 
     <post-list :posts="threadPosts" />
 
-    <div class="col-full push-top">
-      <h1>Create new post in <i>{{ thread.title }}</i></h1>
-
-      <form @submit.prevent="addPost">
-        <div class="form-group">
-          <label for="thread_content">Content:</label>
-          <textarea
-            id="post_content"
-            v-model="newPostText"
-            class="form-input"
-            name="content"
-            rows="8"
-            cols="140"
-          />
-        </div>
-
-        <div class="btn-group">
-          <button class="btn btn-ghost">
-            Cancel
-          </button>
-          <button
-            class="btn btn-blue"
-            type="submit"
-            name="Publish"
-          >
-            Publish
-          </button>
-        </div>
-      </form>
-    </div>
+    <post-editor
+      :title="thread.title"
+      @save="addPost"
+    />
   </div>
 </template>
 
 <script>
+import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
 
 export default {
   components: {
+    PostEditor,
     PostList
   },
   props: {
@@ -98,15 +74,12 @@ export default {
     threadById(threadId) {
       return this.threads.find(thread => thread.id === threadId)
     },
-    addPost() {
+    addPost(eventData) {
       const post = {
-        threadId: this.id,
-        userId: 'ALXhxjwgY9PinwNGHpfai6OWyDu2',
-        publishedAt: Math.floor(Date.now()/1000),
-        text: this.newPostText
+        ...eventData.post,
+        threadId: this.id
       }
       this.$store.dispatch('createPost', post)
-      this.newPostText = ''
     }
   }
 }
