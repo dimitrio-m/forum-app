@@ -26,7 +26,7 @@
     <div class="col-full push-top">
       <h1>Create new post in <i>{{ thread.title }}</i></h1>
 
-      <form action="">
+      <form @submit.prevent="addPost">
         <div class="form-group">
           <label for="thread_content">Content:</label>
           <textarea
@@ -97,6 +97,16 @@ export default {
     },
     threadById(threadId) {
       return this.threads.find(thread => thread.id === threadId)
+    },
+    addPost() {
+      const post = {
+        threadId: this.id,
+        userId: 'ALXhxjwgY9PinwNGHpfai6OWyDu2',
+        publishedAt: Math.floor(Date.now()/1000),
+        text: this.newPostText
+      }
+      this.$store.dispatch('createPost', post)
+      this.newPostText = ''
     }
   }
 }
