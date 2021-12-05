@@ -75,6 +75,8 @@
 </template>
 
 <script>
+import { findById } from '@/helpers'
+
 export default {
   props: {
     posts: {
@@ -95,7 +97,7 @@ export default {
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return findById(this.users, userId)
     },
     countPostsByUser(userId) {
       return this.storedPosts.filter(post => post.userId === userId).length

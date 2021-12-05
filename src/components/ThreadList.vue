@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { findById } from '@/helpers'
+
 export default {
   props: {
     forumThreads: {
@@ -59,10 +61,10 @@ export default {
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return findById(this.users, userId)
     },
     postById(postId) {
-      return this.posts.find(post => post.id === postId)
+      return findById(this.posts, postId)
     },
     getLastPostOfThread(thread) {
       return this.postById(thread.posts[thread.posts.length - 1])

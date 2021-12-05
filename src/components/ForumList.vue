@@ -52,6 +52,8 @@
 </template>
 
 <script>
+import { findById } from '@/helpers'
+
 export default {
   props: {
     forums: {
@@ -73,10 +75,10 @@ export default {
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return findById(this.users, userId)
     },
     threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
+      return findById(this.threads, threadId)
     },
   }
 }

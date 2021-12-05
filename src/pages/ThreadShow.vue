@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import { findById } from '@/helpers'
 import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
 
@@ -78,10 +79,10 @@ export default {
   },
   methods: {
     userById(userId) {
-      return this.users.find(user => user.id === userId)
+      return findById(this.users, userId)
     },
     threadById(threadId) {
-      return this.threads.find(thread => thread.id === threadId)
+      return findById(this.threads, threadId)
     },
     addPost(eventData) {
       const post = {

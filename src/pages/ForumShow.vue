@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { findById } from '@/helpers'
 import ThreadList from '@/components/ThreadList.vue';
 
 export default {
@@ -73,7 +74,7 @@ export default {
   },
   methods: {
     forumById(forumId) {
-      return this.forums.find(forum => forum.id === forumId)
+      return findById(this.forums, forumId)
     },
   }
 }
