@@ -24,3 +24,4 @@ pnpm-debug.log*
 
 # Configuration files
 src/config/*js
+serviceAccount.json
