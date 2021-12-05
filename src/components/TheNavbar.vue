@@ -25,7 +25,10 @@
       :class="{ 'navbar-open': mobileMenu }"
     >
       <ul>
-        <li class="navbar-user">
+        <li
+          v-if="authUser"
+          class="navbar-user"
+        >
           <a @click="dropdown = !dropdown">
             <img
               class="avatar-small"
