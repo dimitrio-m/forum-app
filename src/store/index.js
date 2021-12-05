@@ -40,6 +40,7 @@ export default createStore({
     thread: state => {
       return id => {
         const thread = findById(state.threads, id)
+        if (!thread) return {}
         return {
           ...thread,
           get author() {
@@ -49,80 +50,108 @@ export default createStore({
             return thread.posts.length - 1
           },
           get contributorsCount() {
-            return thread.contributors.length
+            return thread.contributors?.length || 0
           }
         }
       }
     }
   },
   actions: {
-    createPost({ commit, state }, post) {
-      post.id = 'asdf' + Math.random()
+    createPost ({ commit, state }, post) {
+      post.id = 'ggqq' + Math.random()
       post.userId = state.authId
-      post.publishedAt =  Math.floor(Date.now() / 1000)
-      commit('setItem', { item: post, resource: 'posts' })
-      commit('appendPostToThread', { childId: post.id, parentId: post.threadId })
+      post.publishedAt = Math.floor(Date.now() / 1000)
+      commit('setItem', { resource: 'posts', item: post }) // set the post
+      commit('appendPostToThread', { childId: post.id, parentId: post.threadId }) // append post to thread
       commit('appendContributorToThread', { childId: state.authId, parentId: post.threadId })
     },
-    async createThread({ commit, state, dispatch }, { text, title, forumId }) {
-      const id = 'th' + Math.random()
+    async createThread ({ commit, state, dispatch }, { text, title, forumId }) {
+      const id = 'ggqq' + Math.random()
       const userId = state.authId
       const publishedAt = Math.floor(Date.now() / 1000)
-
-      const thread = { text, title, forumId, id, userId, publishedAt }
-
-      commit('setItem', { item: thread, resource: 'threads' })
+      const thread = { forumId, title, publishedAt, userId, id }
+      commit('setItem', { resource: 'threads', item: thread })
       commit('appendThreadToUser', { parentId: userId, childId: id })
       commit('appendThreadToForum', { parentId: forumId, childId: id })
-
-      dispatch('createPost', { text, threadId: id, })
-
+      dispatch('createPost', { text, threadId: id })
       return findById(state.threads, id)
     },
-    async updateThread({ commit, state }, { title, text, id }) {
+    async updateThread ({ commit, state }, { title, text, id }) {
       const thread = findById(state.threads, id)
       const post = findById(state.posts, thread.posts[0])
-
       const newThread = { ...thread, title }
       const newPost = { ...post, text }
-
-      commit('setItem', { item: newThread, resource: 'threads' })
-      commit('setItem', { item: newPost, resource: 'posts' })
-
+      commit('setItem', { resource: 'threads', item: newThread })
+      commit('setItem', { resource: 'posts', item: newPost })
       return newThread
     },
-    updateUser({ commit }, user) {
-      commit('setItem', { item: user, resource: 'users' })
+    updateUser ({ commit }, user) {
+      commit('setItem', { resource: 'users', item: user })
     },
-    fetchThread({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'threads', id })
+    // ---------------------
+    // Fetch single resource
+    // ---------------------
+    fetchCategory ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'categories', id, emoji: '💬' })
     },
-    fetchUser({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'users', id })
+    fetchForum ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'forums', id, emoji: '💬' })
     },
-    fetchPost({ dispatch }, { id }) {
-      return dispatch('fetchItem', { resource: 'posts', id })
+    fetchThread ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'threads', id, emoji: '📄' })
     },
-    fetchThreads({ dispatch }, { ids }) {
-      return dispatch('fetchItems', { resource: 'threads', ids })
+    fetchPost ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'posts', id, emoji: '💬' })
     },
-    fetchUsers({ dispatch }, { ids }) {
-      return dispatch('fetchItems', { resource: 'users', ids })
+    fetchUser ({ dispatch }, { id }) {
+      return dispatch('fetchItem', { resource: 'users', id, emoji: '🙋' })
     },
-    fetchPosts({ dispatch }, { ids }) {
-      return dispatch('fetchItems', { resource: 'posts', ids })
+    // ------------------------
+    // Fetch multiple resources
+    // ------------------------
+    fetchAllCategories ({ commit }) {
+      console.log('🔥', '🏷', 'all')
+      return new Promise((resolve) => {
+        firebase.firestore().collection('categories').onSnapshot((querySnapshot) => {
+          const categories = querySnapshot.docs.map(doc => {
+            const item = { id: doc.id, ...doc.data() }
+            commit('setItem', { resource: 'categories', item })
+            return item
+          })
+          resolve(categories)
+        })
+      })
     },
-    fetchItem({ commit }, { id, resource }) {
-      return new Promise(resolve => {
-        firebase.firestore().collection(resource).doc(id).onSnapshot( doc => {
+    fetchCategories ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'categories', ids, emoji: '🏁' })
+    },
+    fetchForums ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'forums', ids, emoji: '🏁' })
+    },
+    fetchThreads ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'threads', ids, emoji: '📄' })
+    },
+    fetchPosts ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'posts', ids, emoji: '💬' })
+    },
+    fetchUsers ({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'users', ids, emoji: '🙋' })
+    },
+    // ------------------------
+    // Generic actions
+    // ------------------------
+    fetchItem({ commit }, { id, emoji, resource }) {
+      console.log('🔥', emoji, id)
+      return new Promise((resolve) => {
+        firebase.firestore().collection(resource).doc(id).onSnapshot((doc) => {
           const item = { ...doc.data(), id: doc.id }
           commit('setItem', { resource, item })
           resolve(item)
         })
       })
     },
-    fetchItems({ dispatch }, { ids, resource }) {
-      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
+    fetchItems ({ dispatch }, { ids, resource, emoji }) {
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource, emoji })))
     }
   },
   mutations: {

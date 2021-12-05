@@ -1,6 +1,9 @@
 <template>
   <div class="col-full">
-    <div class="col-full push-top">
+    <div
+      v-if="forum"
+      class="col-full push-top"
+    >
       <!-- <ul class="breadcrumbs">
         <li><a href="/index.html"><i class="fa fa-home fa-btn" />Home</a></li>
         <li><a href="/category.html">Discussions</a></li>
@@ -66,9 +69,20 @@ export default {
       return findById(this.forums, this.id)
     },
     threads() {
+      if (!this.forum || !this.forum.threads) return []
       return this.forum.threads.map(threadId => this.$store.getters.thread(threadId))
     }
   },
+  async created() {
+    // fetch forum
+    const forum = await this.$store.dispatch('fetchForum', { id: this.id })
+    // fetch threads
+    const threads = await this.$store.dispatch('fetchThreads', { ids: forum.threads })
+    // fetch users
+    const userIds = threads.map(thread => thread.userId)
+    const uniqueUserIds = [...new Set(userIds)]
+    this.$store.dispatch('fetchUsers', { ids: uniqueUserIds})
+  }
 }
 </script>
 

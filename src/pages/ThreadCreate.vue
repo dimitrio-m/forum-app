@@ -1,5 +1,8 @@
 <template>
-  <div class="col-full push-top">
+  <div
+    v-if="forum"
+    class="col-full push-top"
+  >
     <h1>Create new thread in <i>{{ forum.name }}</i></h1>
     <thread-editor
       @save="save"
@@ -26,6 +29,10 @@ export default {
     forum () {
       return findById(this.$store.state.forums, this.forumId)
     }
+  },
+  created() {
+    if (this.forum) return
+    this.$store.dispatch('fetchForum', { id: this.forumId})
   },
   methods: {
     async save ({ title, text }) {

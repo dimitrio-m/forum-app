@@ -1,5 +1,8 @@
 <template>
-  <div class="thread-list">
+  <div
+    v-if="users.length > 0"
+    class="thread-list"
+  >
     <h2 class="list-title">
       Threads
     </h2>
@@ -10,12 +13,18 @@
     >
       <div>
         <p>
-          <router-link :to="{ name: 'ThreadShow', params: { id: thread.id }}">
+          <router-link
+            v-if="thread.id"
+            :to="{ name: 'ThreadShow', params: { id: thread.id }}"
+          >
             {{ thread.title }}
           </router-link>
         </p>
         <p class="text-faded text-xsmall">
-          By <a href="profile.html"> {{ thread.author.name }} </a>, <app-date :timestamp="thread.publishedAt" />.
+          By <a href="profile.html"> {{ thread.author?.name }} </a>, <app-date
+            v-if="thread.publishedAt"
+            :timestamp="thread.publishedAt"
+          />.
         </p>
       </div>
 
@@ -25,15 +34,18 @@
         </p>
         <img
           class="avatar-medium"
-          :src="userById(getLastPostOfThread(thread).userId).avatar"
+          :src="userById(thread.userId).avatar"
           alt=""
         >
         <div>
           <p class="text-xsmall">
-            <a href="profile.html">{{ userById(getLastPostOfThread(thread).userId).name }}</a>
+            <a href="profile.html">{{ userById(thread.userId).name }}</a>
           </p>
           <p class="text-xsmall text-faded">
-            <app-date :timestamp="getLastPostOfThread(thread).publishedAt" />
+            <app-date
+              v-if="thread.publishedAt"
+              :timestamp="thread.publishedAt"
+            />
           </p>
         </div>
       </div>
@@ -61,10 +73,10 @@ export default {
   },
   methods: {
     userById(userId) {
-      return this.$store.getters.user(userId)
+      return findById(this.users, userId) || {}
     },
     postById(postId) {
-      return findById(this.posts, postId)
+      return findById(this.posts, postId) || {}
     },
     getLastPostOfThread(thread) {
       return this.postById(thread.posts[thread.posts.length - 1])

@@ -69,6 +69,7 @@ export default {
   },
   async created () {
     // fetch thread
+    if (this.thread && this.threadPosts) return
     const thread = await this.$store.dispatch('fetchThread', { id: this.id })
     // fetch the user
     this.$store.dispatch('fetchUser', { id: thread.userId })
@@ -86,7 +87,8 @@ export default {
       }
       this.$store.dispatch('createPost', post)
     }
-  }
+  },
+
 }
 </script>
 

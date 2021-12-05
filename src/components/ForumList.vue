@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="users.length > 0 && posts.length > 0"
     class="forum-list"
   >
     <h2 class="list-title">
@@ -21,7 +22,10 @@
       </div>
 
       <div class="threads-count">
-        <p><span class="count">{{ forum.threads?.length || 0 }}</span> thread</p>
+        <p>
+          <span class="count">{{ forum.threads?.length }}</span>
+          {{ forumThreadsWord(forum) }}
+        </p>
       </div>
 
       <div
@@ -30,13 +34,16 @@
       >
         <img
           class="avatar"
-          :src="userById(threadById(forum.threads[0]).userId).avatar"
+          :src="userById(postById(forum.lastPostId).userId)?.avatar"
           alt=""
         >
         <div class="last-thread-details">
-          <a href="#">{{ threadById(forum.threads[0]).title }}</a>
+          <a href="#">{{ postById(forum.lastPostId).title }}</a>
           <p class="text-xsmall">
-            By <a href="#">{{ userById(threadById(forum.threads[0]).userId).name }}</a>, <app-date :timestamp="threadById(forum.threads[0]).publishedAt" />
+            By <a href="#">{{ userById(postById(forum.lastPostId).userId).name }}</a>, <app-date
+              v-if="postById(forum.lastPostId).publishedAt"
+              :timestamp="postById(forum.lastPostId).publishedAt"
+            />
           </p>
         </div>
       </div>
@@ -44,9 +51,7 @@
       <div
         v-else
         class="last-thread"
-      >
-        No threads here
-      </div>
+      />
     </div>
   </div>
 </template>
@@ -66,8 +71,8 @@ export default {
     }
   },
   computed: {
-    threads() {
-      return this.$store.state.threads
+    posts() {
+      return this.$store.state.posts
     },
     users() {
       return this.$store.state.users
@@ -75,11 +80,18 @@ export default {
   },
   methods: {
     userById(userId) {
-      return findById(this.users, userId)
+      return findById(this.users, userId) || {}
     },
-    threadById(threadId) {
-      return findById(this.threads, threadId)
+    postById(postId) {
+      return findById(this.posts, postId) || {}
     },
+    forumThreadsWord (forum) {
+      if (forum.threads?.length) {
+        return forum.threads.length > 1 ? 'Threads' : 'Thread'
+      } else {
+        return 'No threads'
+      }
+    }
   }
 }
 </script>
