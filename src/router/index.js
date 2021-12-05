@@ -1,6 +1,7 @@
 import {createRouter, createWebHistory} from 'vue-router'
 import Home from '@/pages/Home.vue'
 import ThreadShow from '@/pages/ThreadShow.vue'
+import ThreadCreate from '@/pages/ThreadCreate.vue'
 import ForumShow from '@/pages/ForumShow.vue'
 import NotFound from '@/pages/NotFound.vue'
 import Profile from '@/pages/Profile.vue'
@@ -46,6 +47,7 @@ const routes = [
       }
     }
   },
+  { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true, },
   { path: '/me', name: 'Profile', component: Profile, meta: { toTop: true, smoothScroll: true } },
   { path: '/me/edit', name: 'ProfileEdit', component: Profile, props: { edit: true } },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
