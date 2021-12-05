@@ -23,11 +23,11 @@
       By <a
         href="#"
         class="link-unstyled"
-      >{{ userById(thread.userId).name }}</a>, <app-date :timestamp="thread.publishedAt" />.
+      >{{ thread.author.name }}</a>, <app-date :timestamp="thread.publishedAt" />.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
-      >{{ thread.posts.length - 1 }} replies by {{ thread.contributors?.length || 0 }} contributors</span>
+      >{{ thread.repliesCount }} replies by {{ thread.contributorsCount }} contributors</span>
     </p>
 
     <post-list :posts="threadPosts" />
@@ -40,7 +40,6 @@
 </template>
 
 <script>
-import { findById } from '@/helpers'
 import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
 
@@ -61,29 +60,14 @@ export default {
     }
   },
   computed: {
-    threads() {
-      return this.$store.state.threads
-    },
-    posts() {
-      return this.$store.state.posts
-    },
-    users() {
-      return this.$store.state.users
-    },
     thread() {
-      return this.threadById(this.id)
+      return this.$store.getters.thread(this.id)
     },
     threadPosts() {
-      return this.posts.filter(post => post.threadId === this.id)
+      return this.$store.state.posts.filter(post => post.threadId === this.id)
     }
   },
   methods: {
-    userById(userId) {
-      return findById(this.users, userId)
-    },
-    threadById(threadId) {
-      return findById(this.threads, threadId)
-    },
     addPost(eventData) {
       const post = {
         ...eventData.post,

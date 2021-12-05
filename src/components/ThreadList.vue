@@ -4,7 +4,7 @@
       Threads
     </h2>
     <div
-      v-for="thread in forumThreads"
+      v-for="thread in threads"
       :key="thread.id"
       class="thread"
     >
@@ -15,13 +15,13 @@
           </router-link>
         </p>
         <p class="text-faded text-xsmall">
-          By <a href="profile.html"> {{ userById(thread.userId).name }} </a>, <app-date :timestamp="thread.publishedAt" />.
+          By <a href="profile.html"> {{ thread.author.name }} </a>, <app-date :timestamp="thread.publishedAt" />.
         </p>
       </div>
 
       <div class="activity">
         <p class="replies-count">
-          {{ thread.posts.length - 1 }} reply
+          {{ thread.repliesCount }} reply
         </p>
         <img
           class="avatar-medium"
@@ -46,7 +46,7 @@ import { findById } from '@/helpers'
 
 export default {
   props: {
-    forumThreads: {
+    threads: {
       type: Array,
       required: true
     }
@@ -61,7 +61,7 @@ export default {
   },
   methods: {
     userById(userId) {
-      return findById(this.users, userId)
+      return this.$store.getters.user(userId)
     },
     postById(postId) {
       return findById(this.posts, postId)

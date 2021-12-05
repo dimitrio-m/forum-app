@@ -20,11 +20,11 @@
         </a>
 
         <p class="desktop-only text-small">
-          {{ countPostsByUser(post.userId) }} posts
+          {{ userById(post.userId).postsCount }} posts
         </p>
 
         <p class="desktop-only text-small">
-          {{ countThreadsByUser(post.userId) }} threads
+          {{ userById(post.userId).threadsCount }} threads
         </p>
 
         <span class="online desktop-only">online</span>
@@ -75,8 +75,6 @@
 </template>
 
 <script>
-import { findById } from '@/helpers'
-
 export default {
   props: {
     posts: {
@@ -85,25 +83,13 @@ export default {
     },
   },
   computed: {
-    threads() {
-      return this.$store.state.threads
-    },
-    storedPosts() {
-      return this.$store.state.posts
-    },
     users() {
       return this.$store.state.users
     },
   },
   methods: {
     userById(userId) {
-      return findById(this.users, userId)
-    },
-    countPostsByUser(userId) {
-      return this.storedPosts.filter(post => post.userId === userId).length
-    },
-    countThreadsByUser(userId) {
-      return this.threads.filter(thread => thread.userId === userId).length
+      return this.$store.getters.user(userId)
     },
   }
 }

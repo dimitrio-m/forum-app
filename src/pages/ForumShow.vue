@@ -25,7 +25,7 @@
       </div>
     </div>
 
-    <thread-list :forum-threads="forumThreads" />
+    <thread-list :threads="threads" />
 
     <!-- <div class="col-full">
       <div class="pagination">
@@ -59,24 +59,16 @@ export default {
     },
   },
   computed: {
-    threads() {
-      return this.$store.state.threads
-    },
     forums() {
       return this.$store.state.forums
     },
     forum() {
-      return this.forumById(this.id)
+      return findById(this.forums, this.id)
     },
-    forumThreads() {
-      return this.threads.filter(thread => thread.forumId === this.id)
+    threads() {
+      return this.forum.threads.map(threadId => this.$store.getters.thread(threadId))
     }
   },
-  methods: {
-    forumById(forumId) {
-      return findById(this.forums, forumId)
-    },
-  }
 }
 </script>
 
