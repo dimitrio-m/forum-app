@@ -68,19 +68,18 @@ export default {
       return this.$store.getters.thread(this.id)
     },
     threadPosts() {
-      return this.$store.state.posts.filter(post => post.threadId === this.id)
+      return this.$store.state.posts.filter(post => post.threadId === this.id).sort((a,b) => a.publishedAt - b.publishedAt)
     }
   },
   async created () {
     // fetch thread
     const thread = await this.fetchThread({ id: this.id })
-    // fetch the user
-    this.fetchUser({ id: thread.userId })
     // fetch the posts
     const posts = await this.fetchPosts({ ids: thread.posts })
-    const users = posts.map(post => post.userId)
-    // fetch the user for each post
-    this.fetchUsers({ ids: users })
+    // fetch the user for each post and thread user
+    const userIds = posts.map(post => post.userId).concat(thread.userId)
+    const uniqueUserIds = [...new Set(userIds)]
+    this.fetchUsers({ ids: uniqueUserIds})
   },
   methods: {
     ...mapActions(['fetchThread', 'fetchPosts', 'fetchUsers', 'fetchUser', 'createPost']),
