@@ -16,9 +16,6 @@
       </div>
 
       <div class="btn-group">
-        <button class="btn btn-ghost">
-          Cancel
-        </button>
         <button
           class="btn btn-blue"
           type="submit"
