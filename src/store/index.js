@@ -34,7 +34,7 @@ export default createStore({
       post.userId = state.authId
       post.publishedAt =  Math.floor(Date.now() / 1000)
       commit('setPost', { post })
-      commit('appendPostToThread', { postId: post.id, threadId: post.threadId})
+      commit('appendPostToThread', { childId: post.id, parentId: post.threadId})
     },
     async createThread({ commit, state, dispatch }, { text, title, forumId }) {
       const id = 'th' + Math.random()
@@ -44,8 +44,8 @@ export default createStore({
       const thread = { text, title, forumId, id, userId, publishedAt }
 
       commit('setThread', { thread })
-      commit('appendThreadToUser', { userId, threadId: id })
-      commit('appendThreadToForum', { forumId, threadId: id })
+      commit('appendThreadToUser', { parentId: userId, childId: id })
+      commit('appendThreadToForum', { parentId: forumId, childId: id })
 
       dispatch('createPost', { text, threadId: id, })
 
@@ -78,20 +78,16 @@ export default createStore({
       const userIndex = state.users.findIndex(user => user.id === userId)
       state.users[userIndex] = { ...user }
     },
-    appendPostToThread(state, { postId, threadId }) {
-      const thread = findById(state.threads, threadId)
-      thread.posts = thread.posts || []
-      thread.posts.push(postId)
-    },
-    appendThreadToForum(state, { threadId, forumId }) {
-      const forum = findById(state.forums, forumId)
-      forum.threads = forum.threads || []
-      forum.threads.push(threadId)
-    },
-    appendThreadToUser(state, { threadId, userId }) {
-      const user = findById(state.users, userId)
-      user.threads = user.threads || []
-      user.threads.push(threadId)
-    }
+    appendPostToThread: makeAppendChildToParentMutation({ parent: 'threads', child: 'posts'}),
+    appendThreadToForum: makeAppendChildToParentMutation({ parent: 'forums', child: 'threads'}),
+    appendThreadToUser: makeAppendChildToParentMutation({ parent: 'users', child: 'threads'})
   }
 })
+
+function makeAppendChildToParentMutation ({ parent, child }) {
+  return (state, { childId, parentId }) => {
+    const resource = findById(state[parent], parentId)
+    resource[child] = resource[child] || []
+    resource[child].push(childId)
+  }
+}
