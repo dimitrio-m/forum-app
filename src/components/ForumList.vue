@@ -4,7 +4,7 @@
     class="forum-list"
   >
     <h2 class="list-title">
-      <a href="#"> {{ category.name }}</a>
+      {{ category.name }}
     </h2>
     <div
       v-for="forum in forums"
