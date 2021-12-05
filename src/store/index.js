@@ -103,6 +103,15 @@ export default createStore({
     fetchPost({ dispatch }, { id }) {
       return dispatch('fetchItem', { resource: 'posts', id })
     },
+    fetchThreads({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'threads', ids })
+    },
+    fetchUsers({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'users', ids })
+    },
+    fetchPosts({ dispatch }, { ids }) {
+      return dispatch('fetchItems', { resource: 'posts', ids })
+    },
     fetchItem({ commit }, { id, resource }) {
       return new Promise(resolve => {
         firebase.firestore().collection(resource).doc(id).onSnapshot( doc => {
@@ -111,6 +120,9 @@ export default createStore({
           resolve(item)
         })
       })
+    },
+    fetchItems({ dispatch }, { ids, resource }) {
+      return Promise.all(ids.map(id => dispatch('fetchItem', { id, resource })))
     }
   },
   mutations: {

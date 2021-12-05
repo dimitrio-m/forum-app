@@ -72,13 +72,11 @@ export default {
     const thread = await this.$store.dispatch('fetchThread', { id: this.id })
     // fetch the user
     this.$store.dispatch('fetchUser', { id: thread.userId })
-
     // fetch the posts
-    thread.posts.forEach( async (postId) => {
-      const post = await this.$store.dispatch('fetchPost', { id: postId })
-      // fetch the user for each post
-      this.$store.dispatch('fetchUser', { id: post.userId })
-    })
+    const posts = await this.$store.dispatch('fetchPosts', { ids: thread.posts })
+    const users = posts.map(post => post.userId)
+    // fetch the user for each post
+    this.$store.dispatch('fetchUsers', { ids: users })
   },
   methods: {
     addPost(eventData) {
