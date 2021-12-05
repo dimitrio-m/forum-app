@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="users.length > 0"
+    v-if="users.length > 0 || threads.length === 0"
     class="thread-list"
   >
     <h2 class="list-title">

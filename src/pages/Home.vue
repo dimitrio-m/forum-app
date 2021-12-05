@@ -11,6 +11,7 @@
 
 <script>
 import ForumList from '@/components/ForumList.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -24,20 +25,23 @@ export default {
       return this.$store.state.forums
     }
   },
-  async beforeCreate () {
+  async created () {
     // fetch categories
-    const categories = await this.$store.dispatch('fetchAllCategories')
+    const categories = await this.fetchAllCategories()
     // fetch forums
     const forumIds = categories.map(category => category.forums).flat()
-    const forums = await this.$store.dispatch('fetchForums', { ids: forumIds })
+    const forums = await this.fetchForums({ ids: forumIds })
     // fetch last posts
     const lastPostsIds = forums.map(forum => forum.lastPostId).filter(v => !!v) // remove undefined
-    const posts = await this.$store.dispatch('fetchPosts', { ids: lastPostsIds })
+    const posts = await this.fetchPosts({ ids: lastPostsIds })
     // fetch users
     const userIds = posts.map(post => post.userId)
     const uniqueUserIds = [...new Set(userIds)]
-    this.$store.dispatch('fetchUsers', { ids: uniqueUserIds})
+    this.fetchUsers({ ids: uniqueUserIds})
   },
+  methods: {
+    ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchPosts', 'fetchUsers'])
+  }
 }
 </script>
 

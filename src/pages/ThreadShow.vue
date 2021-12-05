@@ -23,7 +23,10 @@
       By <a
         href="#"
         class="link-unstyled"
-      >{{ thread.author?.name }}</a>, <app-date :timestamp="thread.publishedAt" />.
+      >{{ thread.author?.name }}</a>, <app-date
+        v-if="thread.publishedAt"
+        :timestamp="thread.publishedAt"
+      />.
       <span
         style="float:right; margin-top: 2px;"
         class="hide-mobile text-faded text-small"
@@ -42,6 +45,7 @@
 <script>
 import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
+import { mapActions } from 'vuex'
 
 export default {
   components: {
@@ -69,23 +73,23 @@ export default {
   },
   async created () {
     // fetch thread
-    if (this.thread && this.threadPosts) return
-    const thread = await this.$store.dispatch('fetchThread', { id: this.id })
+    const thread = await this.fetchThread({ id: this.id })
     // fetch the user
-    this.$store.dispatch('fetchUser', { id: thread.userId })
+    this.fetchUser({ id: thread.userId })
     // fetch the posts
-    const posts = await this.$store.dispatch('fetchPosts', { ids: thread.posts })
+    const posts = await this.fetchPosts({ ids: thread.posts })
     const users = posts.map(post => post.userId)
     // fetch the user for each post
-    this.$store.dispatch('fetchUsers', { ids: users })
+    this.fetchUsers({ ids: users })
   },
   methods: {
+    ...mapActions(['fetchThread', 'fetchPosts', 'fetchUsers', 'fetchUser', 'createPost']),
     addPost(eventData) {
       const post = {
         ...eventData.post,
         threadId: this.id
       }
-      this.$store.dispatch('createPost', post)
+      this.createPost(post)
     }
   },
 

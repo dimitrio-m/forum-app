@@ -102,6 +102,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   props: {
     user: {
@@ -115,8 +117,9 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['updateUser']),
     save() {
-      this.$store.dispatch('updateUser', this.activeUser)
+      this.updateUser(this.activeUser)
       this.$router.push({ name: 'Profile' })
     },
     cancel() {

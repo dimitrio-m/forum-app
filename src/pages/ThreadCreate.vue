@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { findById } from '@/helpers'
 import ThreadEditor from '@/components/ThreadEditor.vue'
 
@@ -32,11 +33,12 @@ export default {
   },
   created() {
     if (this.forum) return
-    this.$store.dispatch('fetchForum', { id: this.forumId})
+    this.fetchForum({ id: this.forumId })
   },
   methods: {
+    ...mapActions(['createThread', 'fetchForum']),
     async save ({ title, text }) {
-      const newThread = await this.$store.dispatch('createThread', {
+      const newThread = await this.createThread({
         forumId: this.forum.id,
         title,
         text

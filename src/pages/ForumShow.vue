@@ -49,6 +49,7 @@
 
 <script>
 import { findById } from '@/helpers'
+import { mapActions } from 'vuex';
 import ThreadList from '@/components/ThreadList.vue';
 
 export default {
@@ -75,13 +76,18 @@ export default {
   },
   async created() {
     // fetch forum
-    const forum = await this.$store.dispatch('fetchForum', { id: this.id })
-    // fetch threads
-    const threads = await this.$store.dispatch('fetchThreads', { ids: forum.threads })
-    // fetch users
-    const userIds = threads.map(thread => thread.userId)
-    const uniqueUserIds = [...new Set(userIds)]
-    this.$store.dispatch('fetchUsers', { ids: uniqueUserIds})
+    const forum = await this.fetchForum({ id: this.id })
+    if (forum.threads) {
+      // fetch threads
+      const threads = await this.fetchThreads({ ids: forum.threads })
+      // fetch users
+      const userIds = threads.map(thread => thread.userId)
+      const uniqueUserIds = [...new Set(userIds)]
+      this.fetchUsers({ ids: uniqueUserIds})
+    }
+  },
+  methods: {
+    ...mapActions(['fetchUsers', 'fetchThreads', 'fetchForum'])
   }
 }
 </script>
