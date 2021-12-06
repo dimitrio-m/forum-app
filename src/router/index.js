@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { findById } from '@/helpers'
 import Home from '@/pages/Home.vue'
 import ThreadShow from '@/pages/ThreadShow.vue'
 import ThreadCreate from '@/pages/ThreadCreate.vue'
@@ -16,9 +17,10 @@ const routes = [
     path: '/forum/:id',
     name: 'ForumShow',
     component: ForumShow,
-    props: true
-    /*  beforeEnter (to, from, next) {
-      const forumExists = sourceData.forums.some(forum => forum.id === to.params.id)
+    props: true,
+    async beforeEnter (to, from, next) {
+      await store.dispatch('fetchForum', { id: to.params.id })
+      const forumExists = findById(store.state.forums, to.params.id)
       if (forumExists) {
         next()
       } else {
@@ -29,15 +31,17 @@ const routes = [
           hash: to.hash
         })
       }
-    } */
+    }
   },
   {
     path: '/thread/:id',
     name: 'ThreadShow',
     component: ThreadShow,
-    props: true
-    /* beforeEnter (to, from, next) {
-      const threadExists = sourceData.threads.some(thread => thread.id === to.params.id)
+    props: true,
+    async beforeEnter (to, from, next) {
+      await store.dispatch('fetchThread', { id: to.params.id })
+      const threadExists = findById(store.state.threads, to.params.id)
+      console.log(threadExists)
       if (threadExists) {
         next()
       } else {
@@ -48,7 +52,7 @@ const routes = [
           hash: to.hash
         })
       }
-    } */
+    }
   },
   { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true },
   { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
