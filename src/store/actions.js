@@ -132,7 +132,18 @@ export default {
     commit('setItem', { resource: 'users', item: docToResource(newUser) })
     return docToResource(newUser)
   },
-  updateUser ({ commit }, user) {
+  async updateUser ({ commit }, user) {
+    const updates = {
+      avatar: user.avatar || null,
+      username: user.username || null,
+      name: user.name || null,
+      bio: user.bio || null,
+      website: user.website || null,
+      email: user.email || null,
+      location: user.location || null
+    }
+    const userRef = firebase.firestore().collection('users').doc(user.id)
+    await userRef.update(updates)
     commit('setItem', { resource: 'users', item: user })
   },
   // ---------------------
@@ -155,6 +166,12 @@ export default {
       }
     })
     commit('setAuthId', userId)
+  },
+  async fetchAuthUsersPosts ({ commit, state }) {
+    const posts = await firebase.firestore().collection('posts').where('userId', '==', state.authId).get()
+    posts.forEach(item => {
+      commit('setItem', { resource: 'posts', item })
+    })
   },
   // ------------------------
   // Fetch multiple resources

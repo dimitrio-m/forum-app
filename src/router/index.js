@@ -54,8 +54,20 @@ const routes = [
       }
     }
   },
-  { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true },
-  { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
+  {
+    path: '/forum/:forumId/thread/create',
+    name: 'ThreadCreate',
+    component: ThreadCreate,
+    props: true,
+    meta: { requiresAuth: true }
+  },
+  {
+    path: '/thread/:id/edit',
+    name: 'ThreadEdit',
+    component: ThreadEdit,
+    props: true,
+    meta: { requiresAuth: true }
+  },
   {
     path: '/me',
     name: 'Profile',
@@ -66,17 +78,19 @@ const routes = [
     path: '/me/edit',
     name: 'ProfileEdit',
     component: Profile,
-    props: { edit: true }
+    props: { edit: true, requiresAuth: true }
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register
+    component: Register,
+    meta: { requiresGuest: true }
   },
   {
     path: '/signin',
     name: 'SignIn',
-    component: SignIn
+    component: SignIn,
+    meta: { requiresGuest: true }
   },
   {
     path: '/logout',
@@ -104,7 +118,12 @@ router.beforeEach(async (to, from) => {
   await store.dispatch('initAuthentication')
   console.log(`🚦 navigating to ${to.name} from ${from.name}`)
   store.dispatch('unsubscribeAllSnapshots')
-  if (to.meta.requiresAuth && !store.state.authId) return { name: 'Home' }
+  if (to.meta.requiresAuth && !store.state.authId) {
+    return { name: 'SignIn', query: { redirectTo: to.path } }
+  }
+  if (to.meta.requiresGuest && store.state.authId) {
+    return { name: 'Home' }
+  }
 })
 
 export default router
