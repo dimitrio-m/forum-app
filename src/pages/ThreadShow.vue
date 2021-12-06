@@ -1,5 +1,8 @@
 <template>
-  <div class="col-large push-top">
+  <div
+    v-if="asyncDataStatus_ready"
+    class="col-large push-top"
+  >
     <!-- <ul class="breadcrumbs">
       <li><a href="#"><i class="fa fa-home fa-btn" />Home</a></li>
       <li><a href="category.html">Discussions</a></li>
@@ -45,12 +48,14 @@
 import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
 import { mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   components: {
     PostEditor,
     PostList
   },
+  mixins: [asyncDataStatus],
   props: {
     id: {
       type: String,
@@ -78,7 +83,8 @@ export default {
     // fetch the user for each post and thread user
     const userIds = posts.map(post => post.userId).concat(thread.userId)
     const uniqueUserIds = [...new Set(userIds)]
-    this.fetchUsers({ ids: uniqueUserIds })
+    await this.fetchUsers({ ids: uniqueUserIds })
+    this.asyncDataStatus_fetched()
   },
   methods: {
     ...mapActions(['fetchThread', 'fetchPosts', 'fetchUsers', 'fetchUser', 'createPost']),

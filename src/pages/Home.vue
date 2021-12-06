@@ -1,5 +1,8 @@
 <template>
-  <div class="col-full">
+  <div
+    v-if="asyncDataStatus_ready"
+    class="col-full"
+  >
     <forum-list
       v-for="category in categories"
       :key="category.id"
@@ -12,11 +15,13 @@
 <script>
 import ForumList from '@/components/ForumList.vue'
 import { mapActions } from 'vuex'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   components: {
     ForumList
   },
+  mixins: [asyncDataStatus],
   computed: {
     categories () {
       return this.$store.state.categories
@@ -37,7 +42,8 @@ export default {
     // fetch users
     const userIds = posts.map(post => post.userId)
     const uniqueUserIds = [...new Set(userIds)]
-    this.fetchUsers({ ids: uniqueUserIds })
+    await this.fetchUsers({ ids: uniqueUserIds })
+    this.asyncDataStatus_fetched()
   },
   methods: {
     ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchPosts', 'fetchUsers'])

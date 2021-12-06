@@ -1,5 +1,8 @@
 <template>
-  <div class="col-full">
+  <div
+    v-if="asyncDataStatus_ready"
+    class="col-full"
+  >
     <div
       v-if="forum"
       class="col-full push-top"
@@ -51,11 +54,13 @@
 import { findById } from '@/helpers'
 import { mapActions } from 'vuex'
 import ThreadList from '@/components/ThreadList.vue'
+import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
   components: {
     ThreadList
   },
+  mixins: [asyncDataStatus],
   props: {
     id: {
       type: String,
@@ -83,7 +88,8 @@ export default {
       // fetch users
       const userIds = threads.map(thread => thread.userId)
       const uniqueUserIds = [...new Set(userIds)]
-      this.fetchUsers({ ids: uniqueUserIds })
+      await this.fetchUsers({ ids: uniqueUserIds })
+      this.asyncDataStatus_fetched()
     }
   },
   methods: {

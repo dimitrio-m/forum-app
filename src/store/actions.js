@@ -124,7 +124,6 @@ export default {
     console.log('🔥', emoji, id)
     return new Promise((resolve) => {
       const unsubscribe = firebase.firestore().collection(resource).doc(id).onSnapshot((doc) => {
-        console.log('suscribed ', id)
         const item = { ...doc.data(), id: doc.id }
         commit('setItem', { resource, item })
         resolve(item)

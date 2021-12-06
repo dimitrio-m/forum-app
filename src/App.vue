@@ -1,7 +1,15 @@
 <template>
   <the-navbar />
   <div class="container">
-    <router-view />
+    <router-view
+      v-show="showPage"
+      @ready="showPage = true"
+    />
+    <app-spinner
+      v-show="!showPage"
+    >
+      loading...
+    </app-spinner>
   </div>
 </template>
 
@@ -14,8 +22,16 @@ export default {
   components: {
     TheNavbar
   },
+  data () {
+    return {
+      showPage: false
+    }
+  },
   created () {
     this.fetchAuthUser()
+    this.$router.beforeEach(() => {
+      this.showPage = false
+    })
   },
   methods: {
     ...mapActions(['fetchAuthUser'])
