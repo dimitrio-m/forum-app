@@ -33,8 +33,8 @@ const routes = [
     path: '/thread/:id',
     name: 'ThreadShow',
     component: ThreadShow,
-    props: true,
-    beforeEnter (to, from, next) {
+    props: true
+    /* beforeEnter (to, from, next) {
       const threadExists = sourceData.threads.some(thread => thread.id === to.params.id)
       if (threadExists) {
         next()
@@ -46,7 +46,7 @@ const routes = [
           hash: to.hash
         })
       }
-    }
+    } */
   },
   { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true },
   { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
