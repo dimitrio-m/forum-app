@@ -7,6 +7,7 @@ import ForumShow from '@/pages/ForumShow.vue'
 import NotFound from '@/pages/NotFound.vue'
 import Profile from '@/pages/Profile.vue'
 import sourceData from '@/data.json'
+import store from '@/store'
 
 const routes = [
   { path: '/', name: 'Home', component: Home },
@@ -55,7 +56,7 @@ const routes = [
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
-export default createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
   scrollBehavior (to) {
@@ -65,3 +66,9 @@ export default createRouter({
     return scroll
   }
 })
+
+router.beforeEach(() => {
+  store.dispatch('unsubscribeAllSnapshots')
+})
+
+export default router
