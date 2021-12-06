@@ -6,6 +6,7 @@ import ThreadEdit from '@/pages/ThreadEdit.vue'
 import ForumShow from '@/pages/ForumShow.vue'
 import NotFound from '@/pages/NotFound.vue'
 import Profile from '@/pages/Profile.vue'
+import Register from '@/pages/Register'
 import sourceData from '@/data.json'
 import store from '@/store'
 
@@ -53,6 +54,11 @@ const routes = [
   { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
   { path: '/me', name: 'Profile', component: Profile, meta: { toTop: true, smoothScroll: true } },
   { path: '/me/edit', name: 'ProfileEdit', component: Profile, props: { edit: true } },
+  {
+    path: '/register',
+    name: 'Register',
+    component: Register
+  },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
