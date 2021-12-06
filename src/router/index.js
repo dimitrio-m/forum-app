@@ -7,6 +7,7 @@ import ForumShow from '@/pages/ForumShow.vue'
 import NotFound from '@/pages/NotFound.vue'
 import Profile from '@/pages/Profile.vue'
 import Register from '@/pages/Register'
+import SignIn from '@/pages/SignIn'
 import sourceData from '@/data.json'
 import store from '@/store'
 
@@ -58,6 +59,11 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: Register
+  },
+  {
+    path: '/signin',
+    name: 'SignIn',
+    component: SignIn
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
