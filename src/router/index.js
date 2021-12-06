@@ -8,7 +8,6 @@ import NotFound from '@/pages/NotFound.vue'
 import Profile from '@/pages/Profile.vue'
 import Register from '@/pages/Register'
 import SignIn from '@/pages/SignIn'
-import sourceData from '@/data.json'
 import store from '@/store'
 
 const routes = [
@@ -17,8 +16,8 @@ const routes = [
     path: '/forum/:id',
     name: 'ForumShow',
     component: ForumShow,
-    props: true,
-    beforeEnter (to, from, next) {
+    props: true
+    /*  beforeEnter (to, from, next) {
       const forumExists = sourceData.forums.some(forum => forum.id === to.params.id)
       if (forumExists) {
         next()
@@ -30,7 +29,7 @@ const routes = [
           hash: to.hash
         })
       }
-    }
+    } */
   },
   {
     path: '/thread/:id',
@@ -53,8 +52,18 @@ const routes = [
   },
   { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true },
   { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
-  { path: '/me', name: 'Profile', component: Profile, meta: { toTop: true, smoothScroll: true } },
-  { path: '/me/edit', name: 'ProfileEdit', component: Profile, props: { edit: true } },
+  {
+    path: '/me',
+    name: 'Profile',
+    component: Profile,
+    meta: { toTop: true, smoothScroll: true, requiresAuth: true }
+  },
+  {
+    path: '/me/edit',
+    name: 'ProfileEdit',
+    component: Profile,
+    props: { edit: true }
+  },
   {
     path: '/register',
     name: 'Register',
@@ -64,6 +73,14 @@ const routes = [
     path: '/signin',
     name: 'SignIn',
     component: SignIn
+  },
+  {
+    path: '/logout',
+    name: 'SignOut',
+    async beforeEnter (to, from) {
+      await store.dispatch('signOut')
+      return { name: 'Home' }
+    }
   },
   { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
@@ -79,8 +96,11 @@ const router = createRouter({
   }
 })
 
-router.beforeEach(() => {
+router.beforeEach(async (to, from) => {
+  await store.dispatch('initAuthentication')
+  console.log(`🚦 navigating to ${to.name} from ${from.name}`)
   store.dispatch('unsubscribeAllSnapshots')
+  if (to.meta.requiresAuth && !store.state.authId) return { name: 'Home' }
 })
 
 export default router
