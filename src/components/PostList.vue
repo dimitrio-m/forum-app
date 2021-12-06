@@ -52,8 +52,6 @@
         </a>
       </div>
 
-
-
       <div class="post-date text-faded">
         <app-date :timestamp="post.publishedAt" />
       </div>
@@ -86,17 +84,17 @@ export default {
     posts: {
       type: Array,
       required: true
-    },
+    }
   },
   computed: {
-    users() {
+    users () {
       return this.$store.state.users
-    },
+    }
   },
   methods: {
-    userById(userId) {
+    userById (userId) {
       return this.$store.getters.user(userId)
-    },
+    }
   }
 }
 </script>

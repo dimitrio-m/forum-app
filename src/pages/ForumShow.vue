@@ -49,8 +49,8 @@
 
 <script>
 import { findById } from '@/helpers'
-import { mapActions } from 'vuex';
-import ThreadList from '@/components/ThreadList.vue';
+import { mapActions } from 'vuex'
+import ThreadList from '@/components/ThreadList.vue'
 
 export default {
   components: {
@@ -60,21 +60,21 @@ export default {
     id: {
       type: String,
       required: true
-    },
+    }
   },
   computed: {
-    forums() {
+    forums () {
       return this.$store.state.forums
     },
-    forum() {
+    forum () {
       return findById(this.forums, this.id)
     },
-    threads() {
+    threads () {
       if (!this.forum || !this.forum.threads) return []
       return this.forum.threads.map(threadId => this.$store.getters.thread(threadId))
     }
   },
-  async created() {
+  async created () {
     // fetch forum
     const forum = await this.fetchForum({ id: this.id })
     if (forum.threads) {
@@ -83,7 +83,7 @@ export default {
       // fetch users
       const userIds = threads.map(thread => thread.userId)
       const uniqueUserIds = [...new Set(userIds)]
-      this.fetchUsers({ ids: uniqueUserIds})
+      this.fetchUsers({ ids: uniqueUserIds })
     }
   },
   methods: {

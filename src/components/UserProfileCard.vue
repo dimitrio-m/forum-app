@@ -22,7 +22,6 @@
 
     <span class="online">{{ user.name }} is online</span>
 
-
     <div class="stats">
       <span>{{ user.postsCount }} posts</span>
       <span>{{ user.threadsCount }} threads</span>

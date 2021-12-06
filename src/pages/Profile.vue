@@ -48,7 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters({ user: 'authUser'}),
+    ...mapGetters({ user: 'authUser' })
   }
 }
 </script>

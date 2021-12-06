@@ -37,7 +37,7 @@ export default {
       return post ? post.text : ''
     }
   },
-  async created() {
+  async created () {
     if (this.thread && this.text) return
     const thread = await this.fetchThread({ id: this.id })
     this.fetchPost({ id: thread.posts[0] })
@@ -50,10 +50,10 @@ export default {
         title,
         text
       })
-      this.$router.push({ 'name': 'ThreadShow', params: { id: newThread.id } })
+      this.$router.push({ name: 'ThreadShow', params: { id: newThread.id } })
     },
     cancel () {
-      this.$router.push({ 'name': 'ThreadShow', params: { id: this.id } })
+      this.$router.push({ name: 'ThreadShow', params: { id: this.id } })
     }
   }
 }

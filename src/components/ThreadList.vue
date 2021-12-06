@@ -64,21 +64,21 @@ export default {
     }
   },
   computed: {
-    posts() {
+    posts () {
       return this.$store.state.posts
     },
-    users() {
+    users () {
       return this.$store.state.users
-    },
+    }
   },
   methods: {
-    userById(userId) {
+    userById (userId) {
       return findById(this.users, userId) || {}
     },
-    postById(postId) {
+    postById (postId) {
       return findById(this.posts, postId) || {}
     },
-    getLastPostOfThread(thread) {
+    getLastPostOfThread (thread) {
       return this.postById(thread.posts[thread.posts.length - 1])
     }
   }

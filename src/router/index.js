@@ -1,4 +1,4 @@
-import {createRouter, createWebHistory} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import Home from '@/pages/Home.vue'
 import ThreadShow from '@/pages/ThreadShow.vue'
 import ThreadCreate from '@/pages/ThreadCreate.vue'
@@ -15,7 +15,7 @@ const routes = [
     name: 'ForumShow',
     component: ForumShow,
     props: true,
-    beforeEnter(to, from, next) {
+    beforeEnter (to, from, next) {
       const forumExists = sourceData.forums.some(forum => forum.id === to.params.id)
       if (forumExists) {
         next()
@@ -24,7 +24,7 @@ const routes = [
           name: 'NotFound',
           params: { pathMatch: to.path.substring(1).split('/') },
           query: to.query,
-          hash: to.hash,
+          hash: to.hash
         })
       }
     }
@@ -34,7 +34,7 @@ const routes = [
     name: 'ThreadShow',
     component: ThreadShow,
     props: true,
-    beforeEnter(to, from, next) {
+    beforeEnter (to, from, next) {
       const threadExists = sourceData.threads.some(thread => thread.id === to.params.id)
       if (threadExists) {
         next()
@@ -43,22 +43,22 @@ const routes = [
           name: 'NotFound',
           params: { pathMatch: to.path.substring(1).split('/') },
           query: to.query,
-          hash: to.hash,
+          hash: to.hash
         })
       }
     }
   },
-  { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true, },
-  { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true, },
+  { path: '/forum/:forumId/thread/create', name: 'ThreadCreate', component: ThreadCreate, props: true },
+  { path: '/thread/:id/edit', name: 'ThreadEdit', component: ThreadEdit, props: true },
   { path: '/me', name: 'Profile', component: Profile, meta: { toTop: true, smoothScroll: true } },
   { path: '/me/edit', name: 'ProfileEdit', component: Profile, props: { edit: true } },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound },
+  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
 ]
 
 export default createRouter({
   history: createWebHistory(),
   routes,
-  scrollBehavior(to) {
+  scrollBehavior (to) {
     const scroll = {}
     if (to.meta.toTop) scroll.top = 0
     if (to.meta.smoothScroll) scroll.behavior = 'smooth'

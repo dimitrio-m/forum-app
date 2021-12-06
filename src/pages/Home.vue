@@ -18,10 +18,10 @@ export default {
     ForumList
   },
   computed: {
-    categories() {
+    categories () {
       return this.$store.state.categories
     },
-    forums() {
+    forums () {
       return this.$store.state.forums
     }
   },
@@ -37,7 +37,7 @@ export default {
     // fetch users
     const userIds = posts.map(post => post.userId)
     const uniqueUserIds = [...new Set(userIds)]
-    this.fetchUsers({ ids: uniqueUserIds})
+    this.fetchUsers({ ids: uniqueUserIds })
   },
   methods: {
     ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchPosts', 'fetchUsers'])

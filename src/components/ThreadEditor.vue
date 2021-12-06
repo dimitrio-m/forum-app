@@ -54,7 +54,7 @@ export default {
     }
   },
   emits: ['cancel', 'save'],
-  data() {
+  data () {
     return {
       form: {
         title: this.title,

@@ -31,7 +31,7 @@ export default {
       return findById(this.$store.state.forums, this.forumId)
     }
   },
-  created() {
+  created () {
     if (this.forum) return
     this.fetchForum({ id: this.forumId })
   },
@@ -43,7 +43,7 @@ export default {
         title,
         text
       })
-      this.$router.push({ 'name': 'ThreadShow', params: { id: newThread.id } })
+      this.$router.push({ name: 'ThreadShow', params: { id: newThread.id } })
     },
     cancel () {
       this.$router.push({ name: 'ForumShow', params: { id: this.forum.id } })

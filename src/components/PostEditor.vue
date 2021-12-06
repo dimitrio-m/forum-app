@@ -37,13 +37,13 @@ export default {
     }
   },
   emits: ['save'],
-  data() {
+  data () {
     return {
       text: ''
     }
   },
   methods: {
-    save() {
+    save () {
       const post = {
         text: this.text
       }

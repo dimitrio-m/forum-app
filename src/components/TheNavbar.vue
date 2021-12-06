@@ -89,7 +89,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  data() {
+  data () {
     return {
       dropdown: false,
       mobileMenu: false,
@@ -101,7 +101,7 @@ export default {
         {
           text: 'Log out',
           page: 'Home'
-        },
+        }
       ],
       links: [
         {
@@ -129,7 +129,7 @@ export default {
           text: 'Logout',
           page: 'Home',
           isMobileOnly: true
-        },
+        }
       ]
     }
   },

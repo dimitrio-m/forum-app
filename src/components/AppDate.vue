@@ -20,12 +20,12 @@ export default {
     }
   },
   methods: {
-    diffReadableDate() {
+    diffReadableDate () {
       return dayjs.unix(this.timestamp).fromNow()
     },
-    readableDate() {
+    readableDate () {
       return dayjs.unix(this.timestamp).format('llll')
-    },
+    }
   }
 }
 </script>

@@ -111,18 +111,18 @@ export default {
       required: true
     }
   },
-  data() {
+  data () {
     return {
       activeUser: { ...this.user }
     }
   },
   methods: {
     ...mapActions(['updateUser']),
-    save() {
+    save () {
       this.updateUser(this.activeUser)
       this.$router.push({ name: 'Profile' })
     },
-    cancel() {
+    cancel () {
       this.$router.push({ name: 'Profile' })
     }
   }

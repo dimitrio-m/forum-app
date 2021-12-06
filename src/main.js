@@ -6,7 +6,7 @@ import Store from '@/store'
 import firebaseConfig from '@/config/firebase'
 
 // Initialize Firebase
-firebase.initializeApp(firebaseConfig);
+firebase.initializeApp(firebaseConfig)
 
 const app = createApp(App)
 
