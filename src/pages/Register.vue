@@ -94,8 +94,9 @@ export default {
     this.$emit('ready')
   },
   methods: {
-    register () {
-      console.log('submitting form', this.form)
+    async register () {
+      this.$store.dispatch('createUser', this.form)
+      this.$router.push('/')
     }
   }
 }
