@@ -1,6 +1,7 @@
 import { findById, docToResource } from '@/helpers'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/firestore'
+import 'firebase/compat/auth'
 
 export default {
   async createPost ({ commit, state }, post) {
@@ -83,7 +84,11 @@ export default {
     commit('setItem', { resource: 'posts', item: newPost })
     return docToResource(newThread)
   },
-  async createUser ({ commit }, { email, name, username, avatar = null }) {
+  async registerUserWithEmailAndPassword ({ dispatch }, { avatar = null, email, name, username, password }) {
+    const result = await firebase.auth().createUserWithEmailAndPassword(email, password)
+    dispatch('createUser', { id: result.user.uid, email, name, username, avatar })
+  },
+  async createUser ({ commit }, { id, email, name, username, avatar = null }) {
     const registeredAt = firebase.firestore.FieldValue.serverTimestamp()
     const usernameLower = username.toLowerCase()
     email = email.toLowerCase()

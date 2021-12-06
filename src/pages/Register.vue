@@ -95,7 +95,7 @@ export default {
   },
   methods: {
     async register () {
-      this.$store.dispatch('createUser', this.form)
+      await this.$store.dispatch('registerUserWithEmailAndPassword', this.form)
       this.$router.push('/')
     }
   }
