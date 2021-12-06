@@ -44,11 +44,11 @@
         </div>
         <a
           href="#"
-          style="margin-left: auto;"
+          style="margin-left: auto; padding-left:10px;"
           class="link-unstyled"
           title="Make a change"
         >
-          <i class="fa fa-pencil" />
+          <fa icon="pencil-alt" />
         </a>
       </div>
 
