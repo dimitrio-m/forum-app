@@ -29,7 +29,7 @@
           v-if="authUser"
           class="navbar-user"
         >
-          <a @click="dropdown = !dropdown">
+          <a @click.prevent="dropdown = !dropdown">
             <img
               class="avatar-small"
               :src="authUser.avatar"
@@ -54,15 +54,19 @@
             <div class="triangle-drop" />
             <ul class="dropdown-menu">
               <li
-                v-for="link in dropdownLinks"
-                :key="link.text"
                 class="dropdown-menu-item"
               >
                 <router-link
-                  :to="{ name: link.page}"
+                  :to="{ name: 'Profile' }"
                 >
-                  {{ link.text }}
+                  View Profile
                 </router-link>
+              </li>
+              <li
+                v-if="authUser"
+                class="dropdown-menu-item"
+              >
+                <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
               </li>
             </ul>
           </div>
@@ -70,22 +74,12 @@
       </ul>
 
       <ul>
-        <li
-          v-for="(link,i) in links"
-          :key="i"
-          class="navbar-item"
-          :class="{ 'mobile-only': link.isMobileOnly }"
-        >
-          <router-link :to="{name: link.page}">
-            {{ link.text }}
+        <li class="navbar-item">
+          <router-link :to="{name: 'Home'}">
+            Home
           </router-link>
         </li>
-        <li
-          v-if="authUser"
-          class="navbar-item"
-        >
-          <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
-        </li>
+
         <li
           v-if="!authUser"
           class="navbar-item"
@@ -102,6 +96,21 @@
             Register
           </router-link>
         </li>
+        <li
+          class="navbar-item mobile-only"
+        >
+          <router-link
+            :to="{ name: 'Profile' }"
+          >
+            View Profile
+          </router-link>
+        </li>
+        <li
+          v-if="authUser"
+          class="navbar-item mobile-only"
+        >
+          <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
+        </li>
       </ul>
     </nav>
   </header>
@@ -114,45 +123,7 @@ export default {
   data () {
     return {
       dropdown: false,
-      mobileMenu: false,
-      dropdownLinks: [
-        {
-          text: 'View profile',
-          page: 'Profile'
-        },
-        {
-          text: 'Log out',
-          page: 'Home'
-        }
-      ],
-      links: [
-        {
-          text: 'Home',
-          page: 'Home'
-        },
-        {
-          text: 'Category',
-          page: 'Home'
-        },
-        {
-          text: 'Forum',
-          page: 'Home'
-        },
-        {
-          text: 'Thread',
-          page: 'Home'
-        },
-        {
-          text: 'My Profile',
-          page: 'Profile',
-          isMobileOnly: true
-        },
-        {
-          text: 'Logout',
-          page: 'Home',
-          isMobileOnly: true
-        }
-      ]
+      mobileMenu: false
     }
   },
   computed: {
