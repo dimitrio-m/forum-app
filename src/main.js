@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import firebase from 'firebase/compat/app'
+import 'firebase/compat/auth'
 import App from './App.vue'
 import Router from '@/router'
 import Store from '@/store'
@@ -8,6 +9,11 @@ import FontAwesome from '@/plugins/FontAwesome'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
+firebase.auth().onAuthStateChanged(user => {
+  if (user) {
+    Store.dispatch('fetchAuthUser')
+  }
+})
 
 const app = createApp(App)
 

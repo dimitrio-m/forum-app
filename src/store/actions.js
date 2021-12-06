@@ -93,10 +93,10 @@ export default {
     const usernameLower = username.toLowerCase()
     email = email.toLowerCase()
     const user = { avatar, email, name, username, usernameLower, registeredAt }
-    const userRef = await firebase.firestore().collection('users').doc()
+    const userRef = await firebase.firestore().collection('users').doc(id)
     userRef.set(user)
     const newUser = await userRef.get()
-    commit('setItem', { resource: 'users', item: newUser })
+    commit('setItem', { resource: 'users', item: docToResource(newUser) })
     return docToResource(newUser)
   },
   updateUser ({ commit }, user) {
@@ -110,8 +110,12 @@ export default {
   fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'threads', id, emoji: '📄' }),
   fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'posts', id, emoji: '💬' }),
   fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'users', id, emoji: '🙋' }),
-  fetchAuthUser: ({ dispatch, state }) => dispatch('fetchUser', { id: state.authId }),
-
+  fetchAuthUser: ({ dispatch, state, commit }) => {
+    const userId = firebase.auth().currentUser?.uid
+    if (!userId) return
+    dispatch('fetchItem', { emoji: '🙋', resource: 'users', id: userId })
+    commit('setAuthId', userId)
+  },
   // ------------------------
   // Fetch multiple resources
   // ------------------------
