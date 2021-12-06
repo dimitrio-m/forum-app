@@ -1,13 +1,10 @@
 <template>
   <div class="col-full push-top">
-    <h1>Create new post in <i>{{ title }}</i></h1>
-
     <form @submit.prevent="save">
       <div class="form-group">
-        <label for="thread_content">Content:</label>
         <textarea
           id="post_content"
-          v-model="text"
+          v-model="postCopy.text"
           class="form-input"
           name="content"
           rows="8"
@@ -21,7 +18,7 @@
           type="submit"
           name="Publish"
         >
-          Publish
+          {{ post.id? "Update Post" : "Submit Post" }}
         </button>
       </div>
     </form>
@@ -31,24 +28,21 @@
 <script>
 export default {
   props: {
-    title: {
-      type: String,
-      default: ''
+    post: {
+      type: Object,
+      default: () => ({ text: null })
     }
   },
   emits: ['save'],
   data () {
     return {
-      text: ''
+      postCopy: { ...this.post }
     }
   },
   methods: {
     save () {
-      const post = {
-        text: this.text
-      }
-      this.$emit('save', { post })
-      this.text = ''
+      this.$emit('save', { post: this.postCopy })
+      this.postCopy.text = ''
     }
   }
 }

@@ -36,7 +36,6 @@
     <post-list :posts="threadPosts" />
 
     <post-editor
-      :title="thread.title"
       @save="addPost"
     />
   </div>
