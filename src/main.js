@@ -10,6 +10,7 @@ import FontAwesome from '@/plugins/FontAwesome'
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
 firebase.auth().onAuthStateChanged(user => {
+  Store.dispatch('unsubscribeAuthUserSnapshot')
   if (user) {
     Store.dispatch('fetchAuthUser')
   }

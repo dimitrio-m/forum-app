@@ -91,6 +91,16 @@ export default {
   signInWithEmailAndPassword (context, { email, password }) {
     return firebase.auth().signInWithEmailAndPassword(email, password)
   },
+  async signInWithGoogle ({ dispatch }) {
+    const provider = new firebase.auth.GoogleAuthProvider()
+    const response = await firebase.auth().signInWithPopup(provider)
+    const user = response.user
+    const userRef = firebase.firestore().collection('users').doc(user.uid)
+    const userDoc = await userRef.get()
+    if (!userDoc.exists) {
+      return dispatch('createUser', { id: user.uid, name: user.displayName, email: user.email, username: user.email, avatar: user.photoURL })
+    }
+  },
   async signOut ({ commit }) {
     await firebase.auth().signOut()
     commit('setAuthId', null)
@@ -120,7 +130,14 @@ export default {
   fetchAuthUser: ({ dispatch, state, commit }) => {
     const userId = firebase.auth().currentUser?.uid
     if (!userId) return
-    dispatch('fetchItem', { emoji: '🙋', resource: 'users', id: userId })
+    dispatch('fetchItem', {
+      emoji: '🙋',
+      resource: 'users',
+      id: userId,
+      handleUnsubscribe: (unsubscribe) => {
+        commit('setAuthUserUnsubscribe', unsubscribe)
+      }
+    })
     commit('setAuthId', userId)
   },
   // ------------------------
@@ -147,7 +164,7 @@ export default {
   // ------------------------
   // Generic actions
   // ------------------------
-  fetchItem ({ commit }, { id, emoji, resource }) {
+  fetchItem ({ commit }, { id, emoji, resource, handleUnsubscribe = null }) {
     console.log('🔥', emoji, id)
     return new Promise((resolve) => {
       const unsubscribe = firebase.firestore().collection(resource).doc(id).onSnapshot((doc) => {
@@ -155,7 +172,11 @@ export default {
         commit('setItem', { resource, item })
         resolve(item)
       })
-      commit('appendUnsubscribe', { unsubscribe })
+      if (handleUnsubscribe) {
+        handleUnsubscribe(unsubscribe)
+      } else {
+        commit('appendUnsubscribe', { unsubscribe })
+      }
     })
   },
   fetchItems ({ dispatch }, { ids, resource, emoji }) {
@@ -164,5 +185,11 @@ export default {
   async unsubscribeAllSnapshots ({ state, commit }) {
     state.unsubscribes.forEach(unsubscribe => unsubscribe())
     commit('clearAllUnsubscribes')
+  },
+  async unsubscribeAuthUserSnapshot ({ state, commit }) {
+    if (state.authUserUnsubscribe) {
+      state.authUserUnsubscribe()
+      commit('setAuthUserUnsubscribe', null)
+    }
   }
 }
