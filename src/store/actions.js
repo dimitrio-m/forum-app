@@ -42,6 +42,8 @@ export default {
     fetchThread: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'threads', id, emoji: '📄' }),
     fetchPost: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'posts', id, emoji: '💬' }),
     fetchUser: ({ dispatch }, { id }) => dispatch('fetchItem', { resource: 'users', id, emoji: '🙋' }),
+    fetchAuthUser: ({ dispatch, state }) => dispatch('fetchUser', { id: state.authId }),
+
     // ------------------------
     // Fetch multiple resources
     // ------------------------
