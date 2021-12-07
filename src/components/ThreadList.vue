@@ -32,11 +32,11 @@
         <p class="replies-count">
           {{ thread.repliesCount }} reply
         </p>
-        <img
+        <app-avatar-img
           class="avatar-medium"
           :src="userById(thread.userId).avatar"
           alt=""
-        >
+        />
         <div>
           <p class="text-xsmall">
             <a href="profile.html">{{ userById(thread.userId).name }}</a>

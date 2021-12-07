@@ -18,11 +18,11 @@
         >{{ userById(post.userId).name }}</a>
 
         <a href="profile.html#profile-details">
-          <img
+          <app-avatar-img
             class="avatar-large"
             :src="userById(post.userId).avatar"
             alt=""
-          >
+          />
         </a>
 
         <p class="desktop-only text-small">
