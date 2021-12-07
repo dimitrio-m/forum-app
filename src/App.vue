@@ -3,7 +3,7 @@
   <div class="container">
     <router-view
       v-show="showPage"
-      :key="$route.path"
+      :key="$route.fullPath"
       @ready="onPageReady"
     />
     <AppSpinner v-show="!showPage" />

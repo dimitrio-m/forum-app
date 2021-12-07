@@ -33,20 +33,11 @@
 
     <thread-list :threads="threads" />
 
-    <!-- <div class="col-full">
-      <div class="pagination">
-        <button
-          class="btn-circle"
-          disabled
-        >
-          <i class="fa fa-angle-left" />
-        </button>
-        1 of 3
-        <button class="btn-circle">
-          <i class="fa fa-angle-right" />
-        </button>
-      </div>
-    </div> -->
+    <v-pagination
+      v-model="page"
+      :pages="totalPages"
+      active-color="#57AD8D"
+    />
   </div>
 </template>
 
@@ -67,6 +58,12 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      page: parseInt(this.$route.query.page) || 1,
+      perPage: 10
+    }
+  },
   computed: {
     forums () {
       return this.$store.state.forums.items
@@ -76,7 +73,21 @@ export default {
     },
     threads () {
       if (!this.forum || !this.forum.threads) return []
-      return this.forum.threads.map(threadId => this.$store.getters['threads/thread'](threadId))
+      return this.$store.state.threads.items
+        .filter(thread => thread.forumId === this.forum.id)
+        .map(thread => this.$store.getters['threads/thread'](thread.id))
+    },
+    threadCount () {
+      return this.forum.threads.length
+    },
+    totalPages () {
+      if (!this.threadCount) return 0
+      return Math.ceil(this.threadCount / this.perPage)
+    }
+  },
+  watch: {
+    async page (page) {
+      this.$router.push({ query: { page: this.page } })
     }
   },
   async created () {
@@ -84,7 +95,7 @@ export default {
     const forum = await this.fetchForum({ id: this.id })
     if (forum.threads) {
       // fetch threads
-      const threads = await this.fetchThreads({ ids: forum.threads })
+      const threads = await this.fetchThreadsByPage({ ids: forum.threads, page: this.page, perPage: this.perPage })
       // fetch users
       const userIds = threads.map(thread => thread.userId)
       const uniqueUserIds = [...new Set(userIds)]
@@ -94,7 +105,7 @@ export default {
   },
   methods: {
     ...mapActions('users', ['fetchUsers']),
-    ...mapActions('threads', ['fetchThreads']),
+    ...mapActions('threads', ['fetchThreadsByPage']),
     ...mapActions('forums', ['fetchForum'])
   }
 }
