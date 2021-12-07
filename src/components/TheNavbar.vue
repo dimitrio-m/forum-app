@@ -29,7 +29,10 @@
           v-if="authUser"
           class="navbar-user"
         >
-          <a @click.prevent="dropdown = !dropdown">
+          <a
+            v-click-outside="() => dropdown = false"
+            @click.prevent="dropdown = !dropdown"
+          >
             <img
               class="avatar-small"
               :src="authUser.avatar"
