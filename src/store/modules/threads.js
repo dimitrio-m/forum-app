@@ -21,7 +21,7 @@ export default {
             return thread.posts.length - 1
           },
           get contributorsCount () {
-            return thread.contributors.length
+            return thread.contributors?.length || 0
           }
         }
       }

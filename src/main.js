@@ -7,6 +7,7 @@ import Store from '@/store'
 import firebaseConfig from '@/config/firebase'
 import FontAwesome from '@/plugins/FontAwesome'
 import ClickOutsideDirective from '@/plugins/ClickOutsideDirective'
+import PageScrollDirective from '@/plugins/PageScrollDirective'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -23,6 +24,7 @@ app.use(Router)
 app.use(Store)
 app.use(FontAwesome)
 app.use(ClickOutsideDirective)
+app.use(PageScrollDirective)
 
 const requireComponent = require.context('./components', true, /App[A-Z]\w+\.(vue|js)$/)
 requireComponent.keys().forEach(function (fileName) {

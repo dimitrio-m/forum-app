@@ -1,6 +1,8 @@
 <template>
   <header
     id="header"
+    v-click-outside="()=> mobileMenu = false"
+    v-page-scroll="()=> mobileMenu = false"
     class="header"
   >
     <router-link
@@ -57,6 +59,7 @@
             <div class="triangle-drop" />
             <ul class="dropdown-menu">
               <li
+                v-if="authUser"
                 class="dropdown-menu-item"
               >
                 <router-link
@@ -102,6 +105,7 @@
           </router-link>
         </li>
         <li
+          v-if="authUser"
           class="navbar-item mobile-only"
         >
           <router-link
@@ -135,6 +139,11 @@ export default {
   },
   computed: {
     ...mapGetters('auth', ['authUser'])
+  },
+  created () {
+    this.$router.beforeEach((to, from) => {
+      this.mobileMenu = false
+    })
   }
 }
 </script>
