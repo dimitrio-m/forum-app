@@ -69,14 +69,14 @@ export default {
   },
   computed: {
     forums () {
-      return this.$store.state.forums
+      return this.$store.state.forums.items
     },
     forum () {
       return findById(this.forums, this.id)
     },
     threads () {
       if (!this.forum || !this.forum.threads) return []
-      return this.forum.threads.map(threadId => this.$store.getters.thread(threadId))
+      return this.forum.threads.map(threadId => this.$store.getters['threads/thread'](threadId))
     }
   },
   async created () {
@@ -93,7 +93,9 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['fetchUsers', 'fetchThreads', 'fetchForum'])
+    ...mapActions('users', ['fetchUsers']),
+    ...mapActions('threads', ['fetchThreads']),
+    ...mapActions('forums', ['fetchForum'])
   }
 }
 </script>

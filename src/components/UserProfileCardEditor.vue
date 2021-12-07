@@ -117,7 +117,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['updateUser']),
+    ...mapActions('users', ['updateUser']),
     save () {
       this.updateUser(this.activeUser)
       this.$router.push({ name: 'Profile' })

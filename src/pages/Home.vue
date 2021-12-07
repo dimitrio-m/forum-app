@@ -13,8 +13,8 @@
 </template>
 
 <script>
-import ForumList from '@/components/ForumList.vue'
 import { mapActions } from 'vuex'
+import ForumList from '@/components/ForumList.vue'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
@@ -24,10 +24,10 @@ export default {
   mixins: [asyncDataStatus],
   computed: {
     categories () {
-      return this.$store.state.categories
+      return this.$store.state.categories.items
     },
     forums () {
-      return this.$store.state.forums
+      return this.$store.state.forums.items
     }
   },
   async created () {
@@ -46,7 +46,10 @@ export default {
     this.asyncDataStatus_fetched()
   },
   methods: {
-    ...mapActions(['fetchAllCategories', 'fetchForums', 'fetchPosts', 'fetchUsers'])
+    ...mapActions('categories', ['fetchAllCategories']),
+    ...mapActions('forums', ['fetchForums']),
+    ...mapActions('posts', ['fetchPosts']),
+    ...mapActions('users', ['fetchUsers'])
   }
 }
 </script>

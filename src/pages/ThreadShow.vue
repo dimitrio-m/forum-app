@@ -81,12 +81,12 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authUser']),
+    ...mapGetters('auth', ['authUser']),
     thread () {
-      return this.$store.getters.thread(this.id)
+      return this.$store.getters['threads/thread'](this.id)
     },
     threadPosts () {
-      return this.$store.state.posts.filter(post => post.threadId === this.id).sort((a, b) => a.publishedAt - b.publishedAt)
+      return this.$store.state.posts.items.filter(post => post.threadId === this.id).sort((a, b) => a.publishedAt - b.publishedAt)
     }
   },
   async created () {
@@ -101,7 +101,9 @@ export default {
     this.asyncDataStatus_fetched()
   },
   methods: {
-    ...mapActions(['fetchThread', 'fetchPosts', 'fetchUsers', 'fetchUser', 'createPost']),
+    ...mapActions('threads', ['fetchThread']),
+    ...mapActions('posts', ['fetchPosts', 'createPost']),
+    ...mapActions('users', ['fetchUsers', 'fetchUser']),
     addPost (eventData) {
       const post = {
         ...eventData.post,

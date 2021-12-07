@@ -2,41 +2,41 @@
   <div class="profile-card">
     <p class="text-center">
       <img
-        :src="user.avatar"
-        :alt="`${user.name} profile picture`"
+        :src="user?.avatar"
+        :alt="`${user?.name} profile picture`"
         class="avatar-xlarge"
       >
     </p>
 
     <h1 class="title">
-      {{ user.username }}
+      {{ user?.username }}
     </h1>
 
     <p class="text-lead">
-      {{ user.name }}
+      {{ user?.name }}
     </p>
 
     <p class="text-justify">
-      {{ user.bio || "No bio specified" }}
+      {{ user?.bio || "No bio specified" }}
     </p>
 
-    <span class="online">{{ user.name }} is online</span>
+    <span class="online">{{ user?.name }} is online</span>
 
     <div class="stats">
-      <span>{{ user.postsCount }} posts</span>
-      <span>{{ user.threadsCount }} threads</span>
+      <span>{{ user?.postsCount }} posts</span>
+      <span>{{ user?.threadsCount }} threads</span>
     </div>
 
     <hr>
 
     <p
-      v-if="user.website"
+      v-if="user?.website"
       class="text-large text-center"
     >
       <i class="fa fa-globe" /> <a
         target="_blank"
-        :href="user.website"
-      >{{ user.website }}</a>
+        :href="user?.website"
+      >{{ user?.website }}</a>
     </p>
   </div>
 

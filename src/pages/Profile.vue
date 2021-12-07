@@ -7,21 +7,21 @@
       <div class="col-3 push-top">
         <UserProfileCard
           v-if="!edit"
-          :user="user"
+          :user="user || {}"
         />
         <UserProfileCardEditor
           v-else
-          :user="user"
+          :user="user || {}"
         />
       </div>
 
       <div class="col-7 push-top">
         <div class="profile-header">
-          <span class="text-lead"> {{ user.username }} recent activity </span>
+          <span class="text-lead"> {{ user?.username }} recent activity </span>
           <a href="#">See only started threads?</a>
         </div>
         <hr>
-        <PostList :posts="user.posts" />
+        <PostList :posts="user?.posts || []" />
       </div>
     </div>
   </div>
@@ -44,10 +44,10 @@ export default {
     edit: { type: Boolean, default: false }
   },
   computed: {
-    ...mapGetters({ user: 'authUser' })
+    ...mapGetters({ user: 'auth/authUser' })
   },
   async created () {
-    await this.$store.dispatch('fetchAuthUsersPosts')
+    await this.$store.dispatch('auth/fetchAuthUsersPosts')
     this.asyncDataStatus_fetched()
   }
 }

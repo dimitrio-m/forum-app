@@ -66,7 +66,9 @@
                 v-if="authUser"
                 class="dropdown-menu-item"
               >
-                <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
+                <router-link :to="{ name: 'SignOut' }">
+                  Sign Out
+                </router-link>
               </li>
             </ul>
           </div>
@@ -109,7 +111,9 @@
           v-if="authUser"
           class="navbar-item mobile-only"
         >
-          <a @click.prevent="$store.dispatch('signOut')">Sign Out</a>
+          <router-link :to="{ name: 'SignOut' }">
+            Sign Out
+          </router-link>
         </li>
       </ul>
     </nav>
@@ -127,7 +131,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters(['authUser'])
+    ...mapGetters('auth', ['authUser'])
   }
 }
 </script>
