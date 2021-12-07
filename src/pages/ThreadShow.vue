@@ -58,9 +58,11 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+import difference from 'lodash/difference'
 import PostEditor from '@/components/PostEditor.vue'
 import PostList from '@/components/PostList.vue'
-import { mapActions, mapGetters } from 'vuex'
+import useNotifications from '@/composables/useNotifications.js'
 import asyncDataStatus from '@/mixins/asyncDataStatus'
 
 export default {
@@ -75,6 +77,10 @@ export default {
       required: true
     }
   },
+  setup () {
+    const { addNotification } = useNotifications()
+    return { addNotification }
+  },
   data () {
     return {
       newPostText: ''
@@ -85,25 +91,52 @@ export default {
     thread () {
       return this.$store.getters['threads/thread'](this.id)
     },
+    threads () {
+      return this.$store.state.threads.items
+    },
+    posts () {
+      return this.$store.state.posts.items
+    },
     threadPosts () {
-      return this.$store.state.posts.items.filter(post => post.threadId === this.id).sort((a, b) => a.publishedAt - b.publishedAt)
+      return this.posts.filter(post => post.threadId === this.id).sort((a, b) => a.publishedAt - b.publishedAt)
     }
   },
   async created () {
     // fetch thread
-    const thread = await this.fetchThread({ id: this.id })
-    // fetch the posts
-    const posts = await this.fetchPosts({ ids: thread.posts })
-    // fetch the user for each post and thread user
-    const userIds = posts.map(post => post.userId).concat(thread.userId)
-    const uniqueUserIds = [...new Set(userIds)]
-    await this.fetchUsers({ ids: uniqueUserIds })
+    const thread = await this.fetchThread({
+      id: this.id,
+      onSnapshot: async ({ isLocal, item, previousItem }) => {
+        if (!this.asyncDataStatus_ready || isLocal) return
+        const newPosts = difference(item.posts, previousItem.posts)
+        const hasNewPosts = newPosts.length > 0
+        if (hasNewPosts) {
+          await this.fetchPostsWithUsers(newPosts)
+        } else {
+          this.addNotification({ message: 'Thread recently updated' })
+        }
+      }
+    })
+    await this.fetchPostsWithUsers(thread.posts)
     this.asyncDataStatus_fetched()
   },
   methods: {
     ...mapActions('threads', ['fetchThread']),
     ...mapActions('posts', ['fetchPosts', 'createPost']),
     ...mapActions('users', ['fetchUsers', 'fetchUser']),
+    async fetchPostsWithUsers (ids) {
+      // fetch the posts
+      const posts = await this.fetchPosts({
+        ids,
+        onSnapshot: ({ isLocal, previousItem }) => {
+          if (!this.asyncDataStatus_ready || isLocal || (previousItem?.edited && !previousItem?.edited?.at)) return
+          this.addNotification({ message: 'Thread recently updated' })
+        }
+      })
+      // fetch the users associated with the posts
+      const users = posts.map(post => post.userId).concat(this.thread.userId)
+      const uniqueUsers = [...new Set(users)]
+      await this.fetchUsers({ ids: uniqueUsers })
+    },
     addPost (eventData) {
       const post = {
         ...eventData.post,

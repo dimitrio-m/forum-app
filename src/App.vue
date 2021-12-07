@@ -6,7 +6,8 @@
       :key="$route.fullPath"
       @ready="onPageReady"
     />
-    <AppSpinner v-show="!showPage" />
+    <app-spinner v-show="!showPage" />
+    <app-notifications />
   </div>
 </template>
 
@@ -16,7 +17,9 @@ import { mapActions } from 'vuex'
 import NProgress from 'nprogress'
 export default {
   name: 'App',
-  components: { TheNavbar },
+  components: {
+    TheNavbar
+  },
   data () {
     return {
       showPage: false
