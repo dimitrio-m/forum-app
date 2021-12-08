@@ -137,7 +137,7 @@ export default {
       this.uploadingImage = false
     },
     save () {
-      this.updateUser(this.activeUser)
+      this.updateUser({ ...this.activeUser, threads: this.activeUser.threadIds })
       this.$router.push({ name: 'Profile' })
     },
     cancel () {

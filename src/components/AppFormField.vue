@@ -21,7 +21,7 @@ export default {
   inheritAttrs: false,
   props: {
     name: { type: String, required: true },
-    label: { type: String, required: true },
+    label: { type: String, default: '' },
     modelValue: { type: String, default: '' }
   },
   emits: ['modelUpdate']
