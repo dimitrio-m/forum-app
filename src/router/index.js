@@ -1,22 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { findById } from '@/helpers'
-import Home from '@/pages/Home.vue'
-import ThreadShow from '@/pages/ThreadShow.vue'
-import ThreadCreate from '@/pages/ThreadCreate.vue'
-import ThreadEdit from '@/pages/ThreadEdit.vue'
-import ForumShow from '@/pages/ForumShow.vue'
-import NotFound from '@/pages/NotFound.vue'
-import Profile from '@/pages/Profile.vue'
-import Register from '@/pages/Register'
-import SignIn from '@/pages/SignIn'
 import store from '@/store'
 
 const routes = [
-  { path: '/', name: 'Home', component: Home },
+  {
+    path: '/',
+    name: 'Home',
+    component: () => import(/* webpackChunkName: "Home" */ '@/pages/Home')
+  },
   {
     path: '/forum/:id',
     name: 'ForumShow',
-    component: ForumShow,
+    component: () => import(/* webpackChunkName: "Forum" */'@/pages/ForumShow'),
     props: true,
     async beforeEnter (to, from, next) {
       await store.dispatch('forums/fetchForum', { id: to.params.id })
@@ -36,7 +31,7 @@ const routes = [
   {
     path: '/thread/:id',
     name: 'ThreadShow',
-    component: ThreadShow,
+    component: () => import(/* webpackChunkName: "ThreadShow" */'@/pages/ThreadShow'),
     props: true,
     async beforeEnter (to, from, next) {
       await store.dispatch('threads/fetchThread', { id: to.params.id, once: true })
@@ -56,39 +51,39 @@ const routes = [
   {
     path: '/forum/:forumId/thread/create',
     name: 'ThreadCreate',
-    component: ThreadCreate,
+    component: () => import(/* webpackChunkName: "ThreadCreate" */'@/pages/ThreadCreate'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/thread/:id/edit',
     name: 'ThreadEdit',
-    component: ThreadEdit,
+    component: () => import(/* webpackChunkName: "ThreadEdit" */'@/pages/ThreadEdit'),
     props: true,
     meta: { requiresAuth: true }
   },
   {
     path: '/me',
     name: 'Profile',
-    component: Profile,
+    component: () => import(/* webpackChunkName: "Profile" */'@/pages/Profile'),
     meta: { toTop: true, smoothScroll: true, requiresAuth: true }
   },
   {
     path: '/me/edit',
     name: 'ProfileEdit',
-    component: Profile,
+    component: () => import(/* webpackChunkName: "Profile" */'@/pages/Profile'),
     props: { edit: true, requiresAuth: true }
   },
   {
     path: '/register',
     name: 'Register',
-    component: Register,
+    component: () => import(/* webpackChunkName: "Register" */'@/pages/Register'),
     meta: { requiresGuest: true }
   },
   {
     path: '/signin',
     name: 'SignIn',
-    component: SignIn,
+    component: () => import(/* webpackChunkName: "SignIn" */'@/pages/SignIn'),
     meta: { requiresGuest: true }
   },
   {
@@ -99,7 +94,11 @@ const routes = [
       return { name: 'Home' }
     }
   },
-  { path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFound }
+  {
+    path: '/:pathMatch(.*)*',
+    name: 'NotFound',
+    component: () => import(/* webpackChunkName: "NotFound" */'@/pages/NotFound')
+  }
 ]
 
 const router = createRouter({
