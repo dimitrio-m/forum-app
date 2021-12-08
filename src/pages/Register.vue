@@ -1,73 +1,40 @@
 <template>
   <div class="flex-grid justify-center">
     <div class="col-2">
-      <form
+      <VeeForm
         class="card card-form"
-        @submit.prevent="register"
+        @submit="register"
       >
         <h1 class="text-center">
           Register
         </h1>
 
-        <div class="form-group">
-          <label for="name">Full Name</label>
-          <input
-            id="name"
-            v-model="form.name"
-            type="text"
-            class="form-input"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input
-            id="username"
-            v-model="form.username"
-            type="text"
-            class="form-input"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input
-            id="email"
-            v-model="form.email"
-            type="email"
-            class="form-input"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input
-            id="password"
-            v-model="form.password"
-            type="password"
-            class="form-input"
-          >
-        </div>
-
-        <div class="form-group">
-          <label for="avatar">
-            Avatar
-            <div v-if="avatarPreview">
-              <img
-                :src="avatarPreview"
-                class="avatar-xlarge"
-              >
-            </div>
-          </label>
-          <input
-            v-show="!avatarPreview"
-            id="avatar"
-            type="file"
-            class="form-input"
-            accept="image/*"
-            @change="handleImageUpload"
-          >
-        </div>
+        <AppFormField
+          v-model="form.name"
+          name="name"
+          label="Name"
+          rules="required"
+        />
+        <AppFormField
+          v-model="form.username"
+          name="username"
+          label="Username"
+          rules="required|unique:users,username"
+        />
+        <AppFormField
+          v-model="form.email"
+          name="email"
+          label="Email"
+          rules="required|email|unique:users,email"
+          type="email"
+        />
+        <AppFormField
+          v-model="form.password"
+          name="password"
+          label="Password"
+          rules="required|min:8"
+          type="password"
+        />
 
         <div class="form-actions">
           <button
@@ -77,7 +44,7 @@
             Register
           </button>
         </div>
-      </form>
+      </VeeForm>
       <div class="text-center push-top">
         <button
           class="btn-red btn-xsmall"
@@ -89,7 +56,9 @@
     </div>
   </div>
 </template>
+
 <script>
+
 export default {
   emits: ['ready'],
   data () {
