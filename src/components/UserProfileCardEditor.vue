@@ -99,26 +99,39 @@
         </button>
       </div>
     </VeeForm>
+    <UserProfileCardEditorReauthenticate
+      v-model="needsReAuth"
+      @success="onReauthenticated"
+      @fail="onReauthenticatedFailed"
+    />
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
-import AppAvatarImg from './AppAvatarImg.vue'
+import UserProfileCardEditorReauthenticate from '@/components/UserProfileCardEditorReauthenticate.vue'
+import useNotifications from '@/composables/useNotifications'
 
 export default {
-  components: { AppAvatarImg },
+  components: {
+    UserProfileCardEditorReauthenticate
+  },
   props: {
     user: {
       type: Object,
       required: true
     }
   },
+  setup () {
+    const { addNotification } = useNotifications()
+    return { addNotification }
+  },
   data () {
     return {
       uploadingImage: false,
       activeUser: { ...this.user },
-      locationOptions: []
+      locationOptions: [],
+      needsReAuth: false
     }
   },
   methods: {
@@ -136,9 +149,26 @@ export default {
       this.activeUser.avatar = uploadedImage || this.activeUser.avatar
       this.uploadingImage = false
     },
-    save () {
-      this.updateUser({ ...this.activeUser, threads: this.activeUser.threadIds })
+    async onReauthenticated () {
+      await this.$store.dispatch('auth/updateEmail', { email: this.activeUser.email })
+      this.saveUserData()
+    },
+    async onReauthenticatedFailed () {
+      this.addNotification({ message: 'Error updating user', type: 'error', timeout: 3000 })
       this.$router.push({ name: 'Profile' })
+    },
+    async saveUserData () {
+      await this.$store.dispatch('users/updateUser', { ...this.activeUser, threads: this.activeUser.threadIds })
+      this.$router.push({ name: 'Profile' })
+      this.addNotification({ message: 'User successfully updated', timeout: 3000 })
+    },
+    async save () {
+      const emailChanged = this.activeUser.email !== this.user.email
+      if (emailChanged) {
+        this.needsReAuth = true
+      } else {
+        this.saveUserData()
+      }
     },
     cancel () {
       this.$router.push({ name: 'Profile' })
