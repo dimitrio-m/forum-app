@@ -1,6 +1,7 @@
 import { createApp } from 'vue'
 import firebase from 'firebase/compat/app'
 import 'firebase/compat/auth'
+import 'firebase/compat/app-check'
 import App from './App.vue'
 import Router from '@/router'
 import Store from '@/store'
@@ -19,6 +20,8 @@ firebase.auth().onAuthStateChanged(user => {
     Store.dispatch('auth/fetchAuthUser')
   }
 })
+const appCheck = firebase.appCheck()
+appCheck.activate('6LeyLYodAAAAAM69_alZ2q7xyTGUy1bKO-krdOz4', true)
 
 const app = createApp(App)
 
