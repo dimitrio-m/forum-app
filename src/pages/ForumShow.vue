@@ -7,6 +7,17 @@
       v-if="forum"
       class="col-full push-top"
     >
+      <AppHead>
+        <title>{{ forum?.name }}</title>
+        <meta
+          property="og:title"
+          :content="forum?.name"
+        >
+        <meta
+          name="twitter:title"
+          :content="forum?.name"
+        >
+      </AppHead>
       <!-- <ul class="breadcrumbs">
         <li><a href="/index.html"><i class="fa fa-home fa-btn" />Home</a></li>
         <li><a href="/category.html">Discussions</a></li>

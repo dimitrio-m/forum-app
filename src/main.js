@@ -11,6 +11,7 @@ import ClickOutsideDirective from '@/plugins/ClickOutsideDirective'
 import PageScrollDirective from '@/plugins/PageScrollDirective'
 import Vue3Pagination from '@/plugins/Vue3Pagination'
 import VeeValidatePlugin from '@/plugins/VeeValidatePlugin'
+import { createHead } from '@vueuse/head'
 
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig)
@@ -32,6 +33,7 @@ app.use(ClickOutsideDirective)
 app.use(PageScrollDirective)
 app.use(Vue3Pagination)
 app.use(VeeValidatePlugin)
+app.use(createHead())
 
 const requireComponent = require.context('./components', true, /App[A-Z]\w+\.(vue|js)$/)
 requireComponent.keys().forEach(function (fileName) {

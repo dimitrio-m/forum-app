@@ -1,4 +1,43 @@
 <template>
+  <AppHead>
+    <title>Vue.js 3 Demo Forum App by Dimitrios Mandamadiotis</title>
+    <meta
+      name="description"
+      content="In this project I developed a forum app using Vue. This project serves as a demo of a real-world application, that’s optimized for performance and SEO, and covers all the essential topics for building a modern web application"
+    >
+
+    <!-- Social -->
+    <meta
+      property="og:title"
+      content="Vue.js 3 Demo Forum App by Dimitrios Mandamadiotis"
+    >
+    <meta
+      property="og:description"
+      content="In this project I developed a forum app using Vue. This project serves as a demo of a real-world application, that’s optimized for performance and SEO, and covers all the essential topics for building a modern web application."
+    >
+    <meta
+      property="og:image"
+      content="/logo.png"
+    >
+
+    <!-- Twitter -->
+    <meta
+      name="twitter:title"
+      content="Vue.js 3 Demo Forum App by Dimitrios Mandamadiotis"
+    >
+    <meta
+      name="twitter:description"
+      content="In this project I developed a forum app using Vue. This project serves as a demo of a real-world application, that’s optimized for performance and SEO, and covers all the essential topics for building a modern web application."
+    >
+    <meta
+      name="twitter:image"
+      content="/logo.png"
+    >
+    <meta
+      name="twitter:card"
+      content="summary_large_image"
+    >
+  </AppHead>
   <the-navbar />
   <div class="container">
     <router-view
