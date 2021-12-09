@@ -25,3 +25,5 @@ pnpm-debug.log*
 # Configuration files
 serviceAccount.json
 
+# Mock files
+/mock

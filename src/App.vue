@@ -48,16 +48,19 @@
     <app-spinner v-show="!showPage" />
     <app-notifications />
   </div>
+  <the-footer />
 </template>
 
 <script>
-import TheNavbar from '@/components/TheNavbar'
+import TheNavbar from '@/components/TheNavbar.vue'
+import TheFooter from '@/components/TheFooter.vue'
 import { mapActions } from 'vuex'
 import NProgress from 'nprogress'
 export default {
   name: 'App',
   components: {
-    TheNavbar
+    TheNavbar,
+    TheFooter
   },
   data () {
     return {
